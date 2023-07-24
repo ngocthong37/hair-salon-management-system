@@ -1,5 +1,6 @@
 package com.hairsalon.respository.imp;
 
+import com.hairsalon.entity.Product;
 import com.hairsalon.entity.ProductItem;
 import com.hairsalon.model.ProductItemModel;
 import com.hairsalon.model.ProductModel;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -39,6 +42,49 @@ public class ProductItemImp implements IProductItem {
             LOGGER.error("Error has occurred in Impl findById API: "+e,e);
         }
         return productItemModel;
+    }
+
+    @Override
+    public Integer add(ProductItem productItem) {
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            session.save(productItem);
+            return 1;
+        } catch (Exception e) {
+            LOGGER.error("Error has occurred at update() ", e);
+            return 0;
+        }
+    }
+
+    @Override
+    public Integer update(ProductItem productItem) {
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            session.update(productItem);
+            return 1;
+        } catch (Exception e) {
+            LOGGER.error("Error has occurred at update() ", e);
+            return 0;
+        }
+    }
+
+    @Override
+    public List<ProductItemModel> findAll() {
+        StringBuilder hql = new StringBuilder("From ProductItem");
+        List<ProductItemModel> productItemModelList = new ArrayList<>();
+        List<ProductItem> productItemList = new ArrayList<>();
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(hql.toString());
+            productItemList =  query.getResultList();
+            for (ProductItem productItem: productItemList) {
+                productItemModelList.add(toModel(productItem));
+            }
+        }
+        catch (Exception e) {
+            LOGGER.error("Error has occurred in Impl findById API: "+e,e);
+        }
+        return productItemModelList;
     }
 
     ProductItemModel toModel(ProductItem productItem) {
