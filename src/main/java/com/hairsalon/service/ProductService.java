@@ -17,10 +17,6 @@ public class ProductService {
     @Autowired
     ProductImp productImp;
 
-
-
-
-
     public ResponseEntity<ResponseObject> findAll() {
         Map<String, Object> results = new TreeMap<String, Object>();
         List<ProductModel> productList = new ArrayList<>();
@@ -44,6 +40,5 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Not found", "Not found", ""));
         }
     }
-
 
 }

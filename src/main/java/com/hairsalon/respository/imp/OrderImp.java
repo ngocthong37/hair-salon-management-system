@@ -30,7 +30,7 @@ public class OrderImp implements IOrder {
 
 
     @Override
-    public OrderModel findOrderById(Integer id) {
+    public OrderModel findOrderModelById(Integer id) {
         StringBuilder hql = new StringBuilder("From Order as OP");
         hql.append(" where OP.id = :id");
         Order order = new Order();
@@ -47,6 +47,24 @@ public class OrderImp implements IOrder {
         }
         return orderModel;
     }
+
+    @Override
+    public Order findOrderById(Integer id) {
+        StringBuilder hql = new StringBuilder("From Order as OP");
+        hql.append(" where OP.id = :id");
+        Order order = new Order();
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(hql.toString());
+            query.setParameter("id",id);
+            order = (Order) query.getSingleResult();
+        }
+        catch (Exception e) {
+            LOGGER.error("Error has occurred in Impl findById API: "+e,e);
+        }
+        return order;
+    }
+
 
     @Override
     public List<OrderModel> findAll() {
@@ -87,6 +105,37 @@ public class OrderImp implements IOrder {
         return orderModelList;
     }
 
+    @Override
+    public List<OrderModel> findAllByCustomerId(Integer id) {
+        StringBuilder hql = new StringBuilder("From Order as O where O.customer.id = :id");
+        List<Order> orderList;
+        List<OrderModel> orderModelList = new ArrayList<>();
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(hql.toString());
+            query.setParameter("id", id);
+            orderList = query.getResultList();
+            for (Order order: orderList) {
+                orderModelList.add(toModel(order));
+            }
+        }
+        catch (Exception e) {
+            LOGGER.error("Error has occurred in Impl find All API: "+e,e);
+        }
+        return orderModelList;
+    }
+
+    @Override
+    public Integer updateStatusOrder(Order order) {
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            session.update(order);
+            return 1;
+        } catch (Exception e) {
+            LOGGER.error("Error has occurred at update() ", e);
+            return 0;
+        }
+    }
     OrderModel toModel(Order order) {
         OrderModel orderModel = new OrderModel();
         orderModel.setId(order.getId());

@@ -23,9 +23,9 @@ public class AppointmentController {
         return appointmentService.makeAppointment(json);
     }
 
-    @GetMapping("/{id}")
-    ResponseEntity<ResponseObject> getAllByStatusId(@PathVariable Integer id) {
-        return appointmentService.getAllByStatusId(id);
+    @GetMapping("/{statusId}")
+    ResponseEntity<ResponseObject> getAllByStatusId(@PathVariable Integer statusId) {
+        return appointmentService.getAllByStatusId(statusId);
     }
 
     @GetMapping("/customer/{id}")

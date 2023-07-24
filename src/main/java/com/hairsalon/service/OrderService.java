@@ -2,6 +2,7 @@ package com.hairsalon.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.hairsalon.entity.*;
 import com.hairsalon.model.*;
 import com.hairsalon.respository.imp.*;
@@ -54,6 +55,18 @@ public class OrderService {
         Map<String, Object> results = new TreeMap<String, Object>();
         List<OrderModel> orderModelList = new ArrayList<>();
         orderModelList = orderImp.findAllByStatusId(id);
+        results.put("orderList", orderModelList);
+        if (results.size() > 0) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Not found", "Not found", ""));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> findAllByCustomerId(Integer id) {
+        Map<String, Object> results = new TreeMap<String, Object>();
+        List<OrderModel> orderModelList = new ArrayList<>();
+        orderModelList = orderImp.findAllByCustomerId(id);
         results.put("orderList", orderModelList);
         if (results.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
@@ -133,7 +146,7 @@ public class OrderService {
                 }
             }
             Integer messageId = customerImp.insert(order, orderItems);
-            orderModel = orderImp.findOrderById(messageId);
+            orderModel = orderImp.findOrderModelById(messageId);
             if (messageId != 0) {
 /*                emailSendService.sendMail(customer.getEmail(), cc, "Xác nhận đặt hàng thành công.", "Cảm ơn bé: " + customer.getCustomerName()  + " đã đặt sản phẩm " + productItem.getProductName() + ". " +
                         " Đơn hàng đang được đóng gói và sẽ chuyển tới bạn sớm nhất.");*/
@@ -150,5 +163,32 @@ public class OrderService {
                     .body(new ResponseObject("ERROR", "An error occurred", e.getMessage()));
         }
     }
+
+    public ResponseEntity<Object> updateStatusOrder(String json) {
+        JsonNode jsonNode;
+        JsonMapper jsonMapper = new JsonMapper();
+        Integer statusCode;
+        Integer orderId;
+        try {
+            jsonNode = jsonMapper.readTree(json);
+            orderId = jsonNode.get("orderId") != null ? jsonNode.get("orderId").asInt() : null;
+            statusCode = jsonNode.get("statusCode") != null ? jsonNode.get("statusCode").asInt() : -1;
+            Order order = new Order();
+            order = orderImp.findOrderById(orderId);
+            OrderStatus orderStatus = new OrderStatus();
+            orderStatus.setId(statusCode);
+            order.setOrderStatus(orderStatus);
+            Integer messageId = orderImp.updateStatusOrder(order);
+            if (orderImp.updateStatusOrder(order) < 0) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("ERROR", "Have error when update status code order", ""));
+            }
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", ""));
+    }
+
 
 }

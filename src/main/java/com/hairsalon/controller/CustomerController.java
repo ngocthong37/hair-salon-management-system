@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(path = "/api/v1/customer")
 public class CustomerController {
 
@@ -21,7 +20,6 @@ public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
-
 
     @GetMapping("")
     public ResponseEntity<ResponseObject> findAllCustomer() {
@@ -32,5 +30,11 @@ public class CustomerController {
     public ResponseEntity<ResponseObject> order(@RequestBody String json) {
         return orderService.order(json);
     }
+
+    @GetMapping("/orders/{customerId}")
+    public ResponseEntity<ResponseObject> findAllOrderByCustomerId(@PathVariable Integer customerId) {
+        return orderService.findAllByCustomerId(customerId);
+    }
+
 
 }
