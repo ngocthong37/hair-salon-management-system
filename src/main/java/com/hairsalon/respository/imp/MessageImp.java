@@ -1,7 +1,8 @@
-package com.hairsalon.respository;
+package com.hairsalon.respository.imp;
 
 import javax.persistence.Query;
 
+import com.hairsalon.respository.IMessage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;

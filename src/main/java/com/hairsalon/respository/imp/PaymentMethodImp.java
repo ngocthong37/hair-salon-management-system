@@ -1,9 +1,9 @@
-package com.hairsalon.respository;
+package com.hairsalon.respository.imp;
 
 import com.hairsalon.entity.PaymentMethod;
-import com.hairsalon.entity.User;
 import com.hairsalon.model.CustomerModel;
 import com.hairsalon.model.PaymentMethodModel;
+import com.hairsalon.respository.IPaymentMethod;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class PaymentMethodImp implements IPaymentMethod{
+public class PaymentMethodImp implements IPaymentMethod {
 
     private static final Logger LOGGER = (Logger) LoggerFactory.getLogger(PaymentMethodImp.class);
 

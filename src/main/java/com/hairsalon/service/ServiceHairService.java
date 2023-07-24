@@ -1,9 +1,8 @@
 package com.hairsalon.service;
 
 import com.hairsalon.entity.ResponseObject;
-import com.hairsalon.entity.ServiceHair;
 import com.hairsalon.model.HairServiceModel;
-import com.hairsalon.respository.ServiceHairImp;
+import com.hairsalon.respository.imp.ServiceHairImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

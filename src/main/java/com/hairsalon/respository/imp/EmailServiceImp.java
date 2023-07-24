@@ -1,5 +1,6 @@
-package com.hairsalon.respository;
+package com.hairsalon.respository.imp;
 
+import com.hairsalon.respository.IEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,7 +14,7 @@ import javax.mail.internet.MimeMessage;
 
 @Transactional
 @Repository
-public class EmailServiceImp implements IEmailService{
+public class EmailServiceImp implements IEmailService {
 
     private String fromEmail = "ngocthong2k2@gmail.com";
 

@@ -1,7 +1,8 @@
-package com.hairsalon.respository;
+package com.hairsalon.respository.imp;
 
 import com.hairsalon.entity.OrderStatus;
 import com.hairsalon.model.OrderStatusModel;
+import com.hairsalon.respository.IOrderStatus;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -14,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class OrderStatusImp implements IOrderStatus{
+public class OrderStatusImp implements IOrderStatus {
 
     @Autowired
     SessionFactory sessionFactory;

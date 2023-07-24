@@ -1,6 +1,7 @@
-package com.hairsalon.respository;
+package com.hairsalon.respository.imp;
 
 import com.hairsalon.entity.Permission;
+import com.hairsalon.respository.IPermission;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class PermissionImp implements IPermission{
+public class PermissionImp implements IPermission {
 
     @Autowired
     SessionFactory sessionFactory;

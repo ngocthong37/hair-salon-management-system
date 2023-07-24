@@ -1,8 +1,9 @@
-package com.hairsalon.respository;
+package com.hairsalon.respository.imp;
 
 import com.hairsalon.entity.User;
 import com.hairsalon.model.RoleDetailModel;
 import com.hairsalon.model.UserModel;
+import com.hairsalon.respository.IUser;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;

@@ -1,10 +1,9 @@
-package com.hairsalon.respository;
+package com.hairsalon.respository.imp;
 
 import com.hairsalon.entity.Order;
-import com.hairsalon.entity.OrderItem;
 import com.hairsalon.entity.Product;
-import com.hairsalon.entity.ProductItem;
 import com.hairsalon.model.*;
+import com.hairsalon.respository.IProduct;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -23,7 +22,7 @@ import java.util.Set;
 
 @Transactional
 @Repository
-public class ProductImp implements IProduct{
+public class ProductImp implements IProduct {
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -90,41 +89,7 @@ public class ProductImp implements IProduct{
         }
         return product;
     }
-    @Transactional
-    @Override
-    public Integer insert(Order order, List<OrderItem> orderItems) {
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            Integer orderId = (Integer) session.save(order);
-            for (OrderItem orderItem : orderItems) {
-                orderItem.setOrder(order);
-                session.save(orderItem);
-            }
-            return orderId;
-        } catch (Exception e) {
-            LOGGER.error("Error has occurred at insert()", e);
-            return -1;
-        }
-    }
 
-    @Override
-    public OrderModel findOrderById(Integer id) {
-        StringBuilder hql = new StringBuilder("From Order as OP");
-        hql.append(" where OP.id = :id");
-        Order order = new Order();
-        OrderModel orderModel = new OrderModel();
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            Query query = session.createQuery(hql.toString());
-            query.setParameter("id",id);
-            order = (Order) query.getSingleResult();
-            orderModel = toOrderProductModel(order);
-        }
-        catch (Exception e) {
-            LOGGER.error("Error has occurred in Impl findById API: "+e,e);
-        }
-        return orderModel;
-    }
 
     ProductModel toModel(Product product) {
         ProductModel productModel = new ProductModel();
@@ -134,29 +99,7 @@ public class ProductImp implements IProduct{
         return productModel;
     }
 
-    OrderModel toOrderProductModel(Order order) {
-        OrderModel orderModel = new OrderModel();
-        orderModel.setId(order.getId());
 
-        PaymentMethodModel paymentMethodModel = new PaymentMethodModel();
-        paymentMethodModel.setId(order.getPaymentMethod().getId());
-        paymentMethodModel.setPaymentMethodName(order.getPaymentMethod().getPaymentMethodName());
-        orderModel.setPaymentMethodModel(paymentMethodModel);
-
-        CustomerModel customerModel = new CustomerModel();
-        customerModel.setCustomerName(order.getCustomer().getCustomerName());
-        customerModel.setId(order.getCustomer().getId());
-        orderModel.setCustomerModel(customerModel);
-
-        OrderStatusModel orderStatusModel = new OrderStatusModel();
-        orderStatusModel.setId(order.getOrderStatus().getId());
-        orderModel.setOrderStatusModel(orderStatusModel);
-
-        orderModel.setOrderDate(order.getOrderDate());
-        orderModel.setTotalPrice(order.getTotalPrice());
-
-        return orderModel;
-    }
 
 
 

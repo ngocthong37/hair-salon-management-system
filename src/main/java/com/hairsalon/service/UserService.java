@@ -1,9 +1,8 @@
 package com.hairsalon.service;
 
 import com.hairsalon.entity.ResponseObject;
-import com.hairsalon.model.CustomerModel;
 import com.hairsalon.model.UserModel;
-import com.hairsalon.respository.UserImp;
+import com.hairsalon.respository.imp.UserImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

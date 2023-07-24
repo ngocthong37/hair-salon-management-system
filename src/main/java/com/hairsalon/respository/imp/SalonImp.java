@@ -1,9 +1,8 @@
-package com.hairsalon.respository;
+package com.hairsalon.respository.imp;
 
 import com.hairsalon.entity.Salon;
-import com.hairsalon.entity.ServiceHair;
-import com.hairsalon.model.HairServiceModel;
 import com.hairsalon.model.SalonModel;
+import com.hairsalon.respository.ISalon;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class SalonImp implements ISalon{
+public class SalonImp implements ISalon {
 
     private static final Logger LOGGER = (Logger) LoggerFactory.getLogger(ServiceHairImp.class);
 

@@ -1,7 +1,8 @@
-package com.hairsalon.respository;
+package com.hairsalon.respository.imp;
 
 import com.hairsalon.entity.Appointment;
 import com.hairsalon.model.*;
+import com.hairsalon.respository.IAppointment;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;

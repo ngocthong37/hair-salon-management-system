@@ -1,9 +1,10 @@
-package com.hairsalon.respository;
+package com.hairsalon.respository.imp;
 
 import com.hairsalon.entity.*;
 import com.hairsalon.model.OptionModel;
 import com.hairsalon.model.PermissionModel;
 import com.hairsalon.model.RoleDetailModel;
+import com.hairsalon.respository.IRole;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -20,7 +21,7 @@ import java.util.List;
 @Transactional
 @Repository
 
-public class RoleImp implements IRole{
+public class RoleImp implements IRole {
     private static final Logger LOGGER = (Logger) LoggerFactory.getLogger(ServiceHairImp.class);
 
     @Autowired

@@ -1,9 +1,10 @@
-package com.hairsalon.respository;
+package com.hairsalon.respository.imp;
 
-import com.hairsalon.entity.Appointment;
 import com.hairsalon.entity.Customer;
-import com.hairsalon.model.AppointmentModel;
+import com.hairsalon.entity.Order;
+import com.hairsalon.entity.OrderItem;
 import com.hairsalon.model.CustomerModel;
+import com.hairsalon.respository.ICustomer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ import java.util.Set;
 
 @Transactional
 @Repository
-public class CustomerImp implements ICustomer{
+public class CustomerImp implements ICustomer {
     private static final Logger LOGGER = (Logger) LoggerFactory.getLogger(ServiceHairImp.class);
 
     @Autowired
@@ -47,6 +48,23 @@ public class CustomerImp implements ICustomer{
             LOGGER.error("Error has occurred in findAll " + e, e);
         }
         return customerModelList;
+    }
+
+    @Transactional
+    @Override
+    public Integer insert(Order order, List<OrderItem> orderItems) {
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            Integer orderId = (Integer) session.save(order);
+            for (OrderItem orderItem : orderItems) {
+                orderItem.setOrder(order);
+                session.save(orderItem);
+            }
+            return orderId;
+        } catch (Exception e) {
+            LOGGER.error("Error has occurred at insert()", e);
+            return -1;
+        }
     }
 
     @Override

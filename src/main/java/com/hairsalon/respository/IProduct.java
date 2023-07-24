@@ -12,8 +12,7 @@ public interface IProduct {
     List<ProductModel> findAll();
     List<ProductModel> findAllByCategoryId(Integer cateId);
     Product findById(Integer id);
-    Integer insert(Order order, List<OrderItem> orderItems);
-    OrderModel findOrderById(Integer id);
+
 
 
 }

@@ -18,8 +18,6 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @Autowired
-    private ProductService productService;
 
     @GetMapping("")
     public ResponseEntity<ResponseObject> findAllCustomer() {
@@ -28,7 +26,7 @@ public class CustomerController {
 
     @PostMapping("/order")
     public ResponseEntity<ResponseObject> order(@RequestBody String json) {
-        return productService.order(json);
+        return customerService.order(json);
     }
 
 }

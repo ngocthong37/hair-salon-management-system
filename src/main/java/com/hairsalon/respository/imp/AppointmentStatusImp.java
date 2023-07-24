@@ -1,7 +1,8 @@
-package com.hairsalon.respository;
+package com.hairsalon.respository.imp;
 
 import com.hairsalon.entity.AppointmentStatus;
 import com.hairsalon.model.AppointmentStatusModel;
+import com.hairsalon.respository.IAppointmentStatus;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -15,7 +16,7 @@ import javax.persistence.Query;
 
 @Transactional
 @Repository
-public class AppointmentStatusImp implements IAppointmentStatus{
+public class AppointmentStatusImp implements IAppointmentStatus {
 
     private static final Logger LOGGER = (Logger) LoggerFactory.getLogger(ServiceHairImp.class);
 

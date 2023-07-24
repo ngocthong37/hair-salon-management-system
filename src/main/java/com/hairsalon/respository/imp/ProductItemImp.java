@@ -1,8 +1,9 @@
-package com.hairsalon.respository;
+package com.hairsalon.respository.imp;
 
 import com.hairsalon.entity.ProductItem;
 import com.hairsalon.model.ProductItemModel;
 import com.hairsalon.model.ProductModel;
+import com.hairsalon.respository.IProductItem;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -15,7 +16,7 @@ import javax.persistence.Query;
 
 @Repository
 @Transactional
-public class ProductItemImp implements IProductItem{
+public class ProductItemImp implements IProductItem {
 
     @Autowired
     private SessionFactory sessionFactory;

@@ -1,7 +1,8 @@
-package com.hairsalon.respository;
+package com.hairsalon.respository.imp;
 
 import com.hairsalon.entity.ServiceHair;
 import com.hairsalon.model.HairServiceModel;
+import com.hairsalon.respository.IServiceHair;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -17,7 +18,7 @@ import java.util.*;
 @Transactional
 @Repository
 
-public class ServiceHairImp implements  IServiceHair {
+public class ServiceHairImp implements IServiceHair {
 
     private static final Logger LOGGER = (Logger) LoggerFactory.getLogger(ServiceHairImp.class);
 
