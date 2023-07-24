@@ -3,6 +3,7 @@ package com.hairsalon.controller;
 
 import com.hairsalon.entity.ResponseObject;
 import com.hairsalon.service.CustomerService;
+import com.hairsalon.service.OrderService;
 import com.hairsalon.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
 
     @Autowired
+    private OrderService orderService;
+
+    @Autowired
     private CustomerService customerService;
 
 
@@ -26,7 +30,7 @@ public class CustomerController {
 
     @PostMapping("/order")
     public ResponseEntity<ResponseObject> order(@RequestBody String json) {
-        return customerService.order(json);
+        return orderService.order(json);
     }
 
 }

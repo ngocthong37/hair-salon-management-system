@@ -11,8 +11,15 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
+
+@Repository
+@Transactional
 
 public class OrderImp implements IOrder {
 
@@ -39,6 +46,45 @@ public class OrderImp implements IOrder {
             LOGGER.error("Error has occurred in Impl findById API: "+e,e);
         }
         return orderModel;
+    }
+
+    @Override
+    public List<OrderModel> findAll() {
+        StringBuilder hql = new StringBuilder("From Order as O");
+        List<Order> orderList;
+        List<OrderModel> orderModelList = new ArrayList<>();
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(hql.toString());
+            orderList = query.getResultList();
+            for (Order order: orderList) {
+                orderModelList.add(toModel(order));
+            }
+        }
+        catch (Exception e) {
+            LOGGER.error("Error has occurred in Impl find All API: "+e,e);
+        }
+        return orderModelList;
+    }
+
+    @Override
+    public List<OrderModel> findAllByStatusId(Integer id) {
+        StringBuilder hql = new StringBuilder("From Order as O where O.orderStatus.id = :id");
+        List<Order> orderList;
+        List<OrderModel> orderModelList = new ArrayList<>();
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(hql.toString());
+            query.setParameter("id", id);
+            orderList = query.getResultList();
+            for (Order order: orderList) {
+                orderModelList.add(toModel(order));
+            }
+        }
+        catch (Exception e) {
+            LOGGER.error("Error has occurred in Impl find All API: "+e,e);
+        }
+        return orderModelList;
     }
 
     OrderModel toModel(Order order) {
