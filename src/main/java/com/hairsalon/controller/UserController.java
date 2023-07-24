@@ -19,7 +19,7 @@ public class UserController {
     OrderService orderService;
 
     @GetMapping("users")
-    public ResponseEntity<ResponseObject> findAllCustomer() {
+    public ResponseEntity<ResponseObject> findAllUser() {
         return userService.findAll();
     }
 
@@ -36,7 +36,5 @@ public class UserController {
     ResponseEntity<Object> updateStatusCodeOrder(@RequestBody String json) {
         return orderService.updateStatusOrder(json);
     }
-
-
 
 }

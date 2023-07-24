@@ -1,6 +1,11 @@
 package com.hairsalon.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.hairsalon.entity.Appointment;
+import com.hairsalon.entity.AppointmentStatus;
 import com.hairsalon.entity.ResponseObject;
+import com.hairsalon.entity.ServiceHair;
 import com.hairsalon.model.HairServiceModel;
 import com.hairsalon.respository.imp.ServiceHairImp;
 import org.slf4j.Logger;
@@ -54,6 +59,58 @@ public class ServiceHairService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseObject("ERROR", "Have error:", e.getMessage()));
         }
+    }
+
+    public ResponseEntity<Object> add(String json) {
+        JsonNode jsonNode;
+        JsonMapper jsonMapper = new JsonMapper();
+        try {
+            jsonNode = jsonMapper.readTree(json);
+            String serviceName = jsonNode.get("serviceName") != null ? jsonNode.get("serviceName").asText() : "";
+            Double price = jsonNode.get("price") != null ? jsonNode.get("price").asDouble() : null;
+            String description = jsonNode.get("description") != null ? jsonNode.get("description").asText() : "";
+            String url = jsonNode.get("url") != null ? jsonNode.get("url").asText() : "";
+            ServiceHair serviceHair = new ServiceHair();
+            serviceHair.setServiceName(serviceName);
+            serviceHair.setDescription(description);
+            serviceHair.setPrice(price);
+            serviceHair.setUrl(url);
+            if (serviceHairImp.add(serviceHair) < 0) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("ERROR", "Have error when add service hair", ""));
+            }
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", ""));
+    }
+
+    public ResponseEntity<Object> update(String json) {
+        JsonNode jsonNode;
+        JsonMapper jsonMapper = new JsonMapper();
+        try {
+            jsonNode = jsonMapper.readTree(json);
+            Integer id = jsonNode.get("id") != null ? jsonNode.get("id").asInt() : null;
+            String serviceName = jsonNode.get("serviceName") != null ? jsonNode.get("serviceName").asText() : "";
+            Double price = jsonNode.get("price") != null ? jsonNode.get("price").asDouble() : null;
+            String description = jsonNode.get("description") != null ? jsonNode.get("description").asText() : "";
+            String url = jsonNode.get("url") != null ? jsonNode.get("url").asText() : "";
+            ServiceHair serviceHair = new ServiceHair();
+            serviceHair.setId(id);
+            serviceHair.setServiceName(serviceName);
+            serviceHair.setDescription(description);
+            serviceHair.setPrice(price);
+            serviceHair.setUrl(url);
+            if (serviceHairImp.update(serviceHair) < 0) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("ERROR", "Have error when add service hair", ""));
+            }
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", ""));
     }
 
 

@@ -73,6 +73,30 @@ public class ServiceHairImp implements IServiceHair {
         return hairServiceModel;
     }
 
+    @Override
+    public Integer add(ServiceHair serviceHair) {
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            session.save(serviceHair);
+            return 1;
+        } catch (Exception e) {
+            LOGGER.error("Error has occurred at update() ", e);
+            return 0;
+        }
+    }
+
+    @Override
+    public Integer update(ServiceHair serviceHair) {
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            session.update(serviceHair);
+            return 1;
+        } catch (Exception e) {
+            LOGGER.error("Error has occurred at update() ", e);
+            return 0;
+        }
+    }
+
 
     public HairServiceModel toModel(ServiceHair serviceHair) {
         HairServiceModel hairServiceModel = new HairServiceModel();

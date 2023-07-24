@@ -23,4 +23,14 @@ public class ServiceController {
         return hairService.findById(id);
     }
 
+    @PostMapping("/add")
+    public ResponseEntity<Object> addServiceHair(@RequestBody String json) {
+        return hairService.add(json);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Object> updateServiceHair(@RequestBody String json) {
+        return hairService.update(json);
+    }
+
 }
