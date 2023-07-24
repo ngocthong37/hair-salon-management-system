@@ -22,4 +22,5 @@ public class AppointmentModel {
     private HairServiceModel hairServiceModel;
     private AppointmentStatusModel appointmentStatusModel;
     private SalonModel salonModel;
+    private UserModel userModel;
 }

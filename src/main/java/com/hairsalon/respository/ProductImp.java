@@ -1,15 +1,14 @@
 package com.hairsalon.respository;
 
-import com.hairsalon.entity.Customer;
-import com.hairsalon.entity.OrderProduct;
-import com.hairsalon.entity.OrderStatus;
+import com.hairsalon.entity.Order;
+import com.hairsalon.entity.OrderItem;
 import com.hairsalon.entity.Product;
+import com.hairsalon.entity.ProductItem;
 import com.hairsalon.model.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 
-import org.hibernate.criterion.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,36 +90,40 @@ public class ProductImp implements IProduct{
         }
         return product;
     }
-
+    @Transactional
     @Override
-    public Integer insert(OrderProduct orderProduct) {
+    public Integer insert(Order order, List<OrderItem> orderItems) {
         Session session = sessionFactory.getCurrentSession();
         try {
-            Integer id = (Integer) session.save(orderProduct);
-            return id;
+            Integer orderId = (Integer) session.save(order);
+            for (OrderItem orderItem : orderItems) {
+                orderItem.setOrder(order);
+                session.save(orderItem);
+            }
+            return orderId;
         } catch (Exception e) {
-            LOGGER.error("Error has occurred at add() ", e);
+            LOGGER.error("Error has occurred at insert()", e);
+            return -1;
         }
-        return -1;
     }
 
     @Override
-    public OrderProductModel findOrderById(Integer id) {
-        StringBuilder hql = new StringBuilder("From OrderProduct as OP");
+    public OrderModel findOrderById(Integer id) {
+        StringBuilder hql = new StringBuilder("From Order as OP");
         hql.append(" where OP.id = :id");
-        OrderProduct orderProduct = new OrderProduct();
-        OrderProductModel orderProductModel = new OrderProductModel();
+        Order order = new Order();
+        OrderModel orderModel = new OrderModel();
         try {
             Session session = sessionFactory.getCurrentSession();
             Query query = session.createQuery(hql.toString());
             query.setParameter("id",id);
-            orderProduct = (OrderProduct) query.getSingleResult();
-            orderProductModel = toOrderProductModel(orderProduct);
+            order = (Order) query.getSingleResult();
+            orderModel = toOrderProductModel(order);
         }
         catch (Exception e) {
             LOGGER.error("Error has occurred in Impl findById API: "+e,e);
         }
-        return orderProductModel;
+        return orderModel;
     }
 
     ProductModel toModel(Product product) {
@@ -131,29 +134,28 @@ public class ProductImp implements IProduct{
         return productModel;
     }
 
-    OrderProductModel toOrderProductModel(OrderProduct orderProduct) {
-        OrderProductModel orderProductModel = new OrderProductModel();
-        orderProductModel.setId(orderProduct.getId());
+    OrderModel toOrderProductModel(Order order) {
+        OrderModel orderModel = new OrderModel();
+        orderModel.setId(order.getId());
 
-
-        ProductItemModel productItemModel = new ProductItemModel();
-        productItemModel.setId(orderProduct.getProductItem().getId());
-        productItemModel.setProductName(orderProduct.getProductItem().getProductName());
-        orderProductModel.setProductItemModel(productItemModel);
+        PaymentMethodModel paymentMethodModel = new PaymentMethodModel();
+        paymentMethodModel.setId(order.getPaymentMethod().getId());
+        paymentMethodModel.setPaymentMethodName(order.getPaymentMethod().getPaymentMethodName());
+        orderModel.setPaymentMethodModel(paymentMethodModel);
 
         CustomerModel customerModel = new CustomerModel();
-        customerModel.setCustomerName(orderProduct.getCustomer().getCustomerName());
-        customerModel.setId(orderProduct.getCustomer().getId());
-
-        orderProductModel.setQuantity(orderProduct.getQuantity());
-        orderProductModel.setCustomerModel(customerModel);
+        customerModel.setCustomerName(order.getCustomer().getCustomerName());
+        customerModel.setId(order.getCustomer().getId());
+        orderModel.setCustomerModel(customerModel);
 
         OrderStatusModel orderStatusModel = new OrderStatusModel();
-        orderStatusModel.setId(orderProduct.getOrderStatus().getId());
+        orderStatusModel.setId(order.getOrderStatus().getId());
+        orderModel.setOrderStatusModel(orderStatusModel);
 
+        orderModel.setOrderDate(order.getOrderDate());
+        orderModel.setTotalPrice(order.getTotalPrice());
 
-        orderProductModel.setOrderStatusModel(orderStatusModel);
-        return orderProductModel;
+        return orderModel;
     }
 
 

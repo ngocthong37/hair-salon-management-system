@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Collection;
 
 @NoArgsConstructor
@@ -14,8 +15,8 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity
-@Table(name = "order_product")
-public class OrderProduct {
+@Table(name = "orders")
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -26,17 +27,20 @@ public class OrderProduct {
     private Customer customer;
     @JsonIgnore
     @ManyToOne()
-    @JoinColumn(name = "product_item_id")
-    private ProductItem productItem;
-    @Column(name = "quantity")
-    private Integer quantity;
+    @JoinColumn(name = "pay_id")
+    private PaymentMethod paymentMethod;
+    @Column(name = "total_price")
+    private Integer totalPrice;
     @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "order_status_id")
     private OrderStatus orderStatus;
+    @Column(name = "order_date")
+    private LocalDate orderDate;
+
 
     @JsonIgnore
-    @OneToMany(mappedBy = "orderProduct", fetch = FetchType.LAZY, orphanRemoval = true,
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, orphanRemoval = true,
             cascade = CascadeType.ALL)
-    private Collection<OrderHistory> orderHistories;
+    private Collection<OrderItem> orderItems;
 }

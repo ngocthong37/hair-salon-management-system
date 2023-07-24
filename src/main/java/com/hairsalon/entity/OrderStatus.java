@@ -25,5 +25,5 @@ public class OrderStatus {
 
     @OneToMany(mappedBy = "orderStatus", fetch = FetchType.LAZY, orphanRemoval = true,
             cascade = CascadeType.ALL)
-    private Collection<OrderProduct> orderProducts;
+    private Collection<Order> orders;
 }

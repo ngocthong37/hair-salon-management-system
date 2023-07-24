@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
 import java.time.LocalDate;
 
 @Getter
@@ -18,5 +17,5 @@ public class OrderHistoryModel {
     private Integer id;
     private LocalDate orderDate;
     private Double totalAmount;
-    private OrderProductModel orderProductModel;
+    private OrderModel orderModel;
 }

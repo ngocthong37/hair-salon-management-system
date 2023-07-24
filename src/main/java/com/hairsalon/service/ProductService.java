@@ -4,20 +4,18 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hairsalon.entity.*;
 import com.hairsalon.model.*;
-import com.hairsalon.respository.CustomerImp;
-import com.hairsalon.respository.OrderStatusImp;
-import com.hairsalon.respository.ProductImp;
-import com.hairsalon.respository.ProductItemImp;
+import com.hairsalon.respository.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Transactional
 @Service
@@ -36,6 +34,10 @@ public class ProductService {
 
     @Autowired
     EmailSendService emailSendService;
+
+    @Autowired
+    PaymentMethodImp paymentMethodImp;
+
 
 
     public ResponseEntity<ResponseObject> findAll() {
@@ -62,10 +64,10 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<ResponseObject> orderProduct(String json) {
+    public ResponseEntity<ResponseObject> order(String json) {
         ObjectMapper objectMapper = new ObjectMapper();
-        OrderProduct orderProduct = new OrderProduct();
-        OrderProductModel orderProductModel = new OrderProductModel();
+        Order order = new Order();
+        OrderModel orderModel = new OrderModel();
         try {
             if (json == null || json.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -74,12 +76,17 @@ public class ProductService {
             JsonNode jsonObjectAppointment = objectMapper.readTree(json);
             Integer customerId = jsonObjectAppointment.get("customerId") != null ?
                     Integer.parseInt(jsonObjectAppointment.get("customerId").asText()) : 1;
-            Integer productItemId = jsonObjectAppointment.get("productItemId") != null ?
-                    Integer.parseInt(jsonObjectAppointment.get("productItemId").asText()) : 1;
-            Integer quantity = jsonObjectAppointment.get("quantity") != null ?
-                    Integer.parseInt(jsonObjectAppointment.get("quantity").asText()) : 1;
+            Integer payId = jsonObjectAppointment.get("payId") != null ?
+                    Integer.parseInt(jsonObjectAppointment.get("payId").asText()) : 1;
+            Integer totalPrice = jsonObjectAppointment.get("totalPrice") != null ?
+                    Integer.parseInt(jsonObjectAppointment.get("totalPrice").asText()) : 1;
             Integer statusId = jsonObjectAppointment.get("status") != null ?
                     jsonObjectAppointment.get("status").asInt() : 1;
+            String orderDate = jsonObjectAppointment.get("orderDate") != null ?
+                    jsonObjectAppointment.get("orderDate").asText() : "";
+
+            JsonNode orderItemList = jsonObjectAppointment.get("orderItemList");
+
 
             CustomerModel customerModel = customerImp.findById(customerId);
             Customer customer = new Customer();
@@ -87,13 +94,6 @@ public class ProductService {
             customer.setCustomerName(customerModel.getCustomerName());
             customer.setEmail(customerModel.getEmail());
 
-            ProductItemModel productItemModel = productItemImp.findById(productItemId);
-            ProductItem productItem = new ProductItem();
-            productItem.setProductName(productItemModel.getProductName());
-            productItem.setId(productItemModel.getId());
-            productItem.setPrice(productItemModel.getPrice());
-            productItem.setStatus(productItemModel.getStatus());
-            productItem.setQuantityInStock(productItemModel.getQuantityInStock());
 
             OrderStatusModel orderStatusModel = orderStatusImp.findById(statusId);
             orderStatusModel = orderStatusImp.findById(statusId);
@@ -101,20 +101,46 @@ public class ProductService {
             orderStatus.setId(orderStatusModel.getId());
             orderStatus.setStatus(orderStatusModel.getOrderStatus());
 
-            orderProduct.setCustomer(customer);
-            orderProduct.setProductItem(productItem);
-            orderProduct.setQuantity(quantity);
-            orderProduct.setOrderStatus(orderStatus);
+            PaymentMethodModel paymentMethodModel = new PaymentMethodModel();
+            paymentMethodModel = paymentMethodImp.findById(payId);
+            PaymentMethod paymentMethod = new PaymentMethod();
+            paymentMethod.setId(paymentMethodModel.getId());
+            paymentMethod.setPaymentMethodName(paymentMethodModel.getPaymentMethodName());
+
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate parsedDate = LocalDate.parse(orderDate, dateFormatter);
+
+            order.setCustomer(customer);
+            order.setPaymentMethod(paymentMethod);
+            order.setTotalPrice(totalPrice);
+            order.setOrderStatus(orderStatus);
+            order.setOrderDate(parsedDate);
 
             String[] cc = {"n20dccn152@student.ptithcm.edu.vn"};
-
-            Integer messageId = productImp.insert(orderProduct);
-            orderProductModel = productImp.findOrderById(messageId);
+            List<OrderItem> orderItems = new ArrayList<>();
+            if (orderItemList.isArray()) {
+                for (JsonNode orderItemJson : orderItemList) {
+                    OrderItem orderItem = new OrderItem();
+                    ProductItemModel productItemModel = productItemImp.findById(orderItemJson.get("productItemId").asInt());
+                    ProductItem productItem = new ProductItem();
+                    productItem.setProductName(productItemModel.getProductName());
+                    productItem.setId(productItemModel.getId());
+                    productItem.setPrice(productItemModel.getPrice());
+                    productItem.setStatus(productItemModel.getStatus());
+                    productItem.setQuantityInStock(productItemModel.getQuantityInStock());
+                    orderItem.setProductItem(productItem);
+                    orderItem.setPrice(orderItemJson.get("price").asInt());
+                    orderItem.setQuantity(orderItemJson.get("quantity").asInt());
+                    orderItems.add(orderItem);
+                }
+            }
+            Integer messageId = productImp.insert(order, orderItems);
+            orderModel = productImp.findOrderById(messageId);
             if (messageId != 0) {
-                emailSendService.sendMail(customer.getEmail(), cc, "Xác nhận đặt hàng thành công.", "Cảm ơn bé: " + customer.getCustomerName()  + " đã đặt sản phẩm " + productItem.getProductName() + ". " +
-                        " Đơn hàng đang được đóng gói và sẽ chuyển tới bạn sớm nhất.");
+/*                emailSendService.sendMail(customer.getEmail(), cc, "Xác nhận đặt hàng thành công.", "Cảm ơn bé: " + customer.getCustomerName()  + " đã đặt sản phẩm " + productItem.getProductName() + ". " +
+                        " Đơn hàng đang được đóng gói và sẽ chuyển tới bạn sớm nhất.");*/
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("OK", "Successfully", orderProductModel));
+                        .body(new ResponseObject("OK", "Successfully", orderModel));
             } else {
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("ERROR", "Can not make an appointment", ""));

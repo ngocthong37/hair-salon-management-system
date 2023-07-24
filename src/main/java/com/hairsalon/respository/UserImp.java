@@ -71,11 +71,11 @@ public class UserImp implements IUser {
     public User findById(Integer id) {
         try {
             Session session = sessionFactory.getCurrentSession();
-            String hql = "FROM User as u WHERE u.userName = :id";
+            String hql = "FROM User as u WHERE u.id = :id";
             Query query = session.createQuery(hql);
             query.setParameter("id", id);
             User user = (User) query.getSingleResult();
-            if(null != user) {
+            if(user != null) {
                 return user;
             }
         } catch (Exception e) {

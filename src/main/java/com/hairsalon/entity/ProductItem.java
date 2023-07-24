@@ -29,7 +29,7 @@ public class ProductItem {
 
     @OneToMany(mappedBy = "productItem", fetch = FetchType.LAZY, orphanRemoval = true,
             cascade = CascadeType.ALL)
-    private Collection<OrderProduct> orderProducts;
+    private Collection<OrderItem> orderItems;
 
     @Column(name = "quantity_in_stock")
     private Integer quantityInStock;

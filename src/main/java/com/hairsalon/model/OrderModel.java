@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import java.time.LocalDate;
 
 
 @Getter
@@ -14,10 +15,11 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class OrderProductModel {
+public class OrderModel {
     private Integer id;
     private CustomerModel customerModel;
-    private ProductItemModel productItemModel;
-    private Integer quantity;
+    private Integer totalPrice;
+    private PaymentMethodModel paymentMethodModel;
     private OrderStatusModel orderStatusModel;
+    private LocalDate orderDate;
 }

@@ -44,6 +44,10 @@ public class AppointmentService {
     @Autowired
     private EmailSendService emailSendService;
 
+    @Autowired
+    private UserImp userImpl;
+
+
     public ResponseEntity<ResponseObject> getAll() {
         Map<String, Object> results = new TreeMap<String, Object>();
         List<AppointmentModel> appointmentList = null;
@@ -79,6 +83,8 @@ public class AppointmentService {
                     jsonObjectAppointment.get("appointmentDate").asText() : "";
             String appointmentTime = jsonObjectAppointment.get("appointmentTime") != null ?
                     jsonObjectAppointment.get("appointmentTime").asText() : "";
+            Integer userId = jsonObjectAppointment.get("userId") != null ?
+                    Integer.parseInt(jsonObjectAppointment.get("userId").asText()) : 1;
 
             Appointment appointment = new Appointment();
 
@@ -103,6 +109,9 @@ public class AppointmentService {
             appointmentStatus.setId(appointmentStatusModel.getId());
             appointmentStatus.setStatus(appointmentStatusModel.getStatus());
 
+            User user = userImpl.findById(userId);
+
+
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalTime parsedTime = LocalTime.parse(appointmentTime, timeFormatter);
@@ -113,6 +122,7 @@ public class AppointmentService {
             appointment.setCustomer(customer);
             appointment.setServiceHair(serviceHair);
             appointment.setAppointmentStatus(appointmentStatus);
+            appointment.setUser(user);
 
             LocalDateTime now = LocalDateTime.now();
             Timestamp timestamp = Timestamp.valueOf(now);
@@ -125,9 +135,9 @@ public class AppointmentService {
             String[] cc = {"n20dccn152@student.ptithcm.edu.vn"};
 
             if (messageId != 0) {
-                emailSendService.sendMail(customer.getEmail(), cc, "Lịch hẹn của bạn đã được " +
-                        "ghi lại", "Cảm ơn bé: " + customer.getCustomerName()  + " đã tin tưởng dịch vụ của chúng tôi." +
-                        " Vui lòng để ý điện thoại để nhận được những thông báo sớm nhất.");
+//                emailSendService.sendMail(customer.getEmail(), cc, "Lịch hẹn của bạn đã được " +
+//                        "ghi lại", "Cảm ơn bé: " + customer.getCustomerName()  + " đã tin tưởng dịch vụ của chúng tôi." +
+//                        " Vui lòng để ý điện thoại để nhận được những thông báo sớm nhất.");
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("OK", "Successfully", appointmentModel));
             } else {

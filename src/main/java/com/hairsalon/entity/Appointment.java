@@ -48,6 +48,9 @@ public class Appointment {
     private Timestamp createAt;
     @Column(name = "updated_at")
     private Timestamp updateAt;
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
 }

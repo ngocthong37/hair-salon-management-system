@@ -45,5 +45,5 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, orphanRemoval = true,
             cascade = CascadeType.ALL)
-    private Collection<OrderProduct> orderProducts;
+    private Collection<Order> orders;
 }

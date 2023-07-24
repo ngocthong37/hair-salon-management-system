@@ -27,8 +27,8 @@ public class CustomerController {
     }
 
     @PostMapping("/order")
-    public ResponseEntity<ResponseObject> orderProduct(@RequestBody String json) {
-        return productService.orderProduct(json);
+    public ResponseEntity<ResponseObject> order(@RequestBody String json) {
+        return productService.order(json);
     }
 
 }

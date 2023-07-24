@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,4 +28,7 @@ public class User {
     @ManyToOne()
     @JoinColumn(name = "role_id")
     private Role role;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private Collection<Appointment> appointments;
 }

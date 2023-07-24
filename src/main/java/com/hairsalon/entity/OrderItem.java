@@ -13,19 +13,25 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "order_history")
-public class OrderHistory {
+@Table(name = "order_item")
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "order_date")
-    private LocalDate orderDate;
+    @Column(name = "price")
+    private Integer price;
 
-    @Column(name = "total_amount")
-    private Double totalAmount;
+    @Column(name = "quantity")
+    private Integer quantity;
+
 
     @ManyToOne()
-    @JoinColumn(name = "order_product_id")
-    private OrderProduct orderProduct;
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @ManyToOne()
+    @JoinColumn(name = "product_item_id")
+    private ProductItem productItem;
+
 }
