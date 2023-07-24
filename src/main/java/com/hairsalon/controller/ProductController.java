@@ -25,6 +25,14 @@ public class ProductController {
         return productService.findAllByCateId(id);
     }
 
+    @PostMapping("/add")
+    public ResponseEntity<Object> addProduct(@RequestBody String json) {
+        return productService.add(json);
+    }
 
+    @PutMapping("/update")
+    public ResponseEntity<Object> updateProduct(@RequestBody String json) {
+        return productService.update(json);
+    }
 
 }

@@ -90,6 +90,30 @@ public class ProductImp implements IProduct {
         return product;
     }
 
+    @Override
+    public Integer add(Product product) {
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            session.save(product);
+            return 1;
+        } catch (Exception e) {
+            LOGGER.error("Error has occurred at update() ", e);
+            return 0;
+        }
+    }
+
+    @Override
+    public Integer update(Product product) {
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            session.update(product);
+            return 1;
+        } catch (Exception e) {
+            LOGGER.error("Error has occurred at update() ", e);
+            return 0;
+        }
+    }
+
 
     ProductModel toModel(Product product) {
         ProductModel productModel = new ProductModel();

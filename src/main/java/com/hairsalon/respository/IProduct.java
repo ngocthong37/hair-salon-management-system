@@ -12,7 +12,7 @@ public interface IProduct {
     List<ProductModel> findAll();
     List<ProductModel> findAllByCategoryId(Integer cateId);
     Product findById(Integer id);
-
-
+    Integer add(Product product);
+    Integer update(Product product);
 
 }
