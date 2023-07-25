@@ -1,6 +1,5 @@
 package com.hairsalon.respository.imp;
 
-import com.hairsalon.entity.Product;
 import com.hairsalon.respository.IRevenue;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -34,6 +33,9 @@ public class RevenueImp implements IRevenue {
         catch (Exception e) {
             LOGGER.error("Error has occurred in Impl getRevenueFromService API: "+e,e);
         }
+        if (res == null) {
+            return 0.0;
+        }
         return res;
     }
 
@@ -49,6 +51,51 @@ public class RevenueImp implements IRevenue {
         }
         catch (Exception e) {
             LOGGER.error("Error has occurred in Impl getRevenueFromProduct: "+e,e);
+        }
+        if (res == null) {
+            return 0.0;
+        }
+        return res;
+    }
+
+    @Override
+    public Double getRevenueFromServiceByYear(Integer year) {
+        Double res = 0.0;
+        StringBuilder hql = new StringBuilder("Select SUM(SH.price) from Appointment A INNER" +
+                " JOIN ServiceHair SH ON A.serviceHair.id = SH.id AND A.appointmentStatus.id = 3 and YEAR(A.appointmentDate) = :year");
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(hql.toString());
+            query.setParameter("year", year);
+            res = (Double) query.getSingleResult();
+        }
+        catch (Exception e) {
+            LOGGER.error("Error has occurred in Impl getRevenueFromService API: "+e,e);
+        }
+        if (res == null) {
+            return 0.0;
+        }
+        return res;
+    }
+
+    @Override
+    public Double getRevenueFromServiceByMonth(Integer year, Integer month) {
+        Double res = 0.0;
+        StringBuilder hql = new StringBuilder("Select SUM(SH.price) from Appointment A INNER" +
+                " JOIN ServiceHair SH ON A.serviceHair.id = SH.id AND A.appointmentStatus.id = 3 and MONTH(A.appointmentDate) = :month " +
+                "AND YEAR(A.appointmentDate) = :year");
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(hql.toString());
+            query.setParameter("month", month);
+            query.setParameter("year", year);
+            res = (Double) query.getSingleResult();
+        }
+        catch (Exception e) {
+            LOGGER.error("Error has occurred in Impl getRevenueFromService API: "+e,e);
+        }
+        if (res == null) {
+            return 0.0;
         }
         return res;
     }

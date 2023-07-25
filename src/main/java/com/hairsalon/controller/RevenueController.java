@@ -5,6 +5,7 @@ import com.hairsalon.service.RevenueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,5 +25,16 @@ public class RevenueController {
     public ResponseEntity<ResponseObject> getTotalRevenueFromProduct() {
         return revenueService.getRevenueFromProduct();
     }
+
+    @GetMapping("revenueService/{year}")
+    public ResponseEntity<ResponseObject> getTotalRevenueFromServiceByYear(@PathVariable Integer year) {
+        return revenueService.getRevenueFromServiceByYear(year);
+    }
+
+    @GetMapping("revenueService/{year}/{month}")
+    public ResponseEntity<ResponseObject> getTotalRevenueFromServiceByYear(@PathVariable Integer year, @PathVariable Integer month) {
+        return revenueService.getRevenueFromServiceByMonth(year, month);
+    }
+
 
 }

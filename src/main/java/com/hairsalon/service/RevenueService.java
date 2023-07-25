@@ -37,4 +37,20 @@ public class RevenueService {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
     }
 
+    public ResponseEntity<ResponseObject> getRevenueFromServiceByYear(Integer year) {
+        Map<String, Object> results = new TreeMap<String, Object>();
+        Double price = revenueImp.getRevenueFromServiceByYear(year);
+        results.put("totalMoney", price);
+        results.size();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
+    }
+
+    public ResponseEntity<ResponseObject> getRevenueFromServiceByMonth(Integer year, Integer month) {
+        Map<String, Object> results = new TreeMap<String, Object>();
+        Double price = revenueImp.getRevenueFromServiceByMonth(year, month);
+        results.put("totalMoney", price);
+        results.size();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
+    }
+
 }
