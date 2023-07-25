@@ -140,7 +140,7 @@ public class OrderService {
                     productItem.setStatus(productItemModel.getStatus());
                     productItem.setQuantityInStock(productItemModel.getQuantityInStock());
                     orderItem.setProductItem(productItem);
-                    orderItem.setPrice(orderItemJson.get("price").asInt());
+                    orderItem.setPrice(orderItemJson.get("price").asDouble());
                     orderItem.setQuantity(orderItemJson.get("quantity").asInt());
                     orderItems.add(orderItem);
                 }
@@ -148,8 +148,8 @@ public class OrderService {
             Integer messageId = customerImp.insert(order, orderItems);
             orderModel = orderImp.findOrderModelById(messageId);
             if (messageId != 0) {
-/*                emailSendService.sendMail(customer.getEmail(), cc, "Xác nhận đặt hàng thành công.", "Cảm ơn bé: " + customer.getCustomerName()  + " đã đặt sản phẩm " + productItem.getProductName() + ". " +
-                        " Đơn hàng đang được đóng gói và sẽ chuyển tới bạn sớm nhất.");*/
+                emailSendService.sendMail(customer.getEmail(), cc, "Xác nhận đặt hàng thành công.", "Cảm ơn bé: " + customer.getCustomerName()  + " đã đặt sản phẩm." +
+                        " Đơn hàng đang được đóng gói và sẽ chuyển tới bạn sớm nhất.");
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("OK", "Successfully", orderModel));
             } else {
