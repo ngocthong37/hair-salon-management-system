@@ -15,4 +15,5 @@ public interface IProduct {
     Integer add(Product product);
     Integer update(Product product);
 
+
 }

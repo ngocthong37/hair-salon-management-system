@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface IProductItem {
     ProductItemModel findById(Integer id);
+    List<ProductItemModel> findByProductItemName(String productItemName);
     Integer add(ProductItem product);
     Integer update(ProductItem product);
     List<ProductItemModel> findAll();
+
 }

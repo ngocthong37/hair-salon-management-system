@@ -8,6 +8,7 @@ import java.util.List;
 public interface IServiceHair {
     List<HairServiceModel> getAllService();
     HairServiceModel findById(Integer id);
+    List<HairServiceModel> findByServiceName(String serviceName);
     Integer add(ServiceHair serviceHair);
     Integer update(ServiceHair serviceHair);
 }

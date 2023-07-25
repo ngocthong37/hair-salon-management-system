@@ -74,6 +74,27 @@ public class ServiceHairImp implements IServiceHair {
     }
 
     @Override
+    public List<HairServiceModel> findByServiceName(String serviceName) {
+        List<HairServiceModel> hairServiceModelList = new ArrayList<>();
+        List<ServiceHair> serviceHairList = new ArrayList<>();
+        StringBuilder hql = new StringBuilder("FROM ServiceHair AS s");
+        hql.append(" WHERE s.serviceName LIKE CONCAT('%', :serviceName, '%')");
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(hql.toString());
+            query.setParameter("serviceName",serviceName);
+            serviceHairList = query.getResultList();
+            for(ServiceHair serviceHair: serviceHairList) {
+                hairServiceModelList.add(toModel(serviceHair));
+            }
+        }
+        catch (Exception e) {
+            LOGGER.error("Error has occurred in Impl findById API: "+e,e);
+        }
+        return hairServiceModelList;
+    }
+
+    @Override
     public Integer add(ServiceHair serviceHair) {
         Session session = sessionFactory.getCurrentSession();
         try {

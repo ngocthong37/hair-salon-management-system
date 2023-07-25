@@ -7,6 +7,7 @@ import com.hairsalon.entity.Product;
 import com.hairsalon.entity.ProductItem;
 import com.hairsalon.entity.ResponseObject;
 import com.hairsalon.model.AppointmentModel;
+import com.hairsalon.model.HairServiceModel;
 import com.hairsalon.model.ProductItemModel;
 import com.hairsalon.respository.imp.ProductItemImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,10 +84,6 @@ public class ProductItemService {
             Integer productId = jsonNode.get("productId") != null ? jsonNode.get("productId").asInt() : -1;
             Integer warrantyTime = jsonNode.get("quantity") != null ? jsonNode.get("quantity").asInt() : -1;
             String status = jsonNode.get("status") != null ? jsonNode.get("status").asText() : "";
-
-
-
-
             ProductItem productItem = new ProductItem();
             productItem.setProductName(productName);
             Product product = new Product();
@@ -106,4 +103,25 @@ public class ProductItemService {
         }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", ""));
     }
+
+    public ResponseEntity<ResponseObject> findByProductItemName(String productItemName) {
+        List<ProductItemModel> productItemModelList = new ArrayList<>();
+        try {
+            Map<String, Object> results = new TreeMap<String, Object>();
+            productItemModelList = productItemImp.findByProductItemName(productItemName);
+            results.put("productItemList", productItemModelList);
+            if (results.size() > 0) {
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
+            }
+            else {
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ERROR", "Have error", ""));
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("ERROR", "Have error:", e.getMessage()));
+        }
+    }
+
 }

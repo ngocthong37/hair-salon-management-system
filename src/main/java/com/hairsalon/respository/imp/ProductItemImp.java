@@ -2,6 +2,8 @@ package com.hairsalon.respository.imp;
 
 import com.hairsalon.entity.Product;
 import com.hairsalon.entity.ProductItem;
+import com.hairsalon.entity.ServiceHair;
+import com.hairsalon.model.HairServiceModel;
 import com.hairsalon.model.ProductItemModel;
 import com.hairsalon.model.ProductModel;
 import com.hairsalon.respository.IProductItem;
@@ -42,6 +44,27 @@ public class ProductItemImp implements IProductItem {
             LOGGER.error("Error has occurred in Impl findById API: "+e,e);
         }
         return productItemModel;
+    }
+
+    @Override
+    public List<ProductItemModel> findByProductItemName(String productItemName) {
+        List<ProductItemModel> productItemModelList = new ArrayList<>();
+        List<ProductItem> productItemList = new ArrayList<>();
+        StringBuilder hql = new StringBuilder("FROM ProductItem AS PI");
+        hql.append(" WHERE PI.productName LIKE CONCAT('%', :productItemName, '%')");
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            org.hibernate.query.Query query = session.createQuery(hql.toString());
+            query.setParameter("productItemName",productItemName);
+            productItemList = query.getResultList();
+            for(ProductItem productItem: productItemList) {
+                productItemModelList.add(toModel(productItem));
+            }
+        }
+        catch (Exception e) {
+            LOGGER.error("Error has occurred in Impl findById API: "+e,e);
+        }
+        return productItemModelList;
     }
 
     @Override

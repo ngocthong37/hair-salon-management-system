@@ -23,6 +23,11 @@ public class ServiceController {
         return hairService.findById(id);
     }
 
+    @GetMapping("/{serviceName}")
+    public ResponseEntity<ResponseObject> findServiceByName(@PathVariable String serviceName) {
+        return hairService.findByServiceName(serviceName);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<Object> addServiceHair(@RequestBody String json) {
         return hairService.add(json);

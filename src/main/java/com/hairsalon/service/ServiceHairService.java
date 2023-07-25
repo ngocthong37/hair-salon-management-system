@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -37,6 +38,27 @@ public class ServiceHairService {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Not found", "Not found", ""));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> findByServiceName(String serviceName) {
+        List<HairServiceModel> hairServiceModelList = new ArrayList<>();
+        try {
+            Map<String, Object> results = new TreeMap<String, Object>();
+            hairServiceModelList = serviceHairImp.findByServiceName(serviceName);
+            results.put("hairService", hairServiceModelList);
+            if (results.size() > 0) {
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
+            }
+            else {
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ERROR", "Have error", ""));
+            }
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("ERROR", "Have error:", e.getMessage()));
         }
     }
 

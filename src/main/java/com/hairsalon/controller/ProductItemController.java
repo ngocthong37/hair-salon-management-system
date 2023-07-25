@@ -30,4 +30,9 @@ public class ProductItemController {
         return productItemService.update(json);
     }
 
+    @GetMapping("/productItem/{productItemName}")
+    public ResponseEntity<ResponseObject> findAllByProductItemName(@PathVariable String productItemName) {
+        return productItemService.findByProductItemName(productItemName);
+    }
+
 }
