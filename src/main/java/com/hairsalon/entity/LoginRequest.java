@@ -1,6 +1,6 @@
 package com.hairsalon.entity;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

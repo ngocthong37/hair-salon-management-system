@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 import java.util.Map;
 
 
@@ -20,7 +20,6 @@ public class UserModel {
     private String userName;
     private String email;
     private boolean enableLogin;
-    private RoleDetailModel roleDetailModel;
     private String password;
     private Map<String, Object> roleCustom;
 }

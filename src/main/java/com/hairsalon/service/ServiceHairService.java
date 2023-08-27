@@ -2,12 +2,10 @@ package com.hairsalon.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.hairsalon.entity.Appointment;
-import com.hairsalon.entity.AppointmentStatus;
 import com.hairsalon.entity.ResponseObject;
 import com.hairsalon.entity.ServiceHair;
 import com.hairsalon.model.HairServiceModel;
-import com.hairsalon.respository.imp.ServiceHairImp;
+import com.hairsalon.respository.imp.ServiceHairRepositoryImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,7 @@ import java.util.TreeMap;
 @Service
 public class ServiceHairService {
     @Autowired
-    private ServiceHairImp serviceHairImp;
+    private ServiceHairRepositoryImp serviceHairImp;
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 

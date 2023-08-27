@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.hairsalon.entity.*;
 import com.hairsalon.model.*;
-import com.hairsalon.respository.imp.ProductImp;
+import com.hairsalon.respository.imp.ProductRepositoryImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.util.*;
 @Service
 public class ProductService {
     @Autowired
-    ProductImp productImp;
+    ProductRepositoryImp productImp;
 
     public ResponseEntity<ResponseObject> findAll() {
         Map<String, Object> results = new TreeMap<String, Object>();

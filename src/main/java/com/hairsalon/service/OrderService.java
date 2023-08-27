@@ -21,22 +21,22 @@ import java.util.TreeMap;
 @Service
 public class OrderService {
     @Autowired
-    OrderImp orderImp;
+    OrderRepositoryImp orderImp;
 
     @Autowired
-    OrderStatusImp orderStatusImp;
+    OrderStatusRepositoryImp orderStatusImp;
 
     @Autowired
     ProductItemImp productItemImp;
 
-    @Autowired
-    EmailSendService emailSendService;
+/*    @Autowired
+    EmailSendService emailSendService;*/
 
     @Autowired
-    PaymentMethodImp paymentMethodImp;
+    PaymentMethodRepositoryImp paymentMethodImp;
 
     @Autowired
-    CustomerImp customerImp;
+    CustomerRepositoryImp customerImp;
 
 
     public ResponseEntity<ResponseObject> findAll() {
@@ -148,8 +148,8 @@ public class OrderService {
             Integer messageId = customerImp.insert(order, orderItems);
             orderModel = orderImp.findOrderModelById(messageId);
             if (messageId != 0) {
-                emailSendService.sendMail(customer.getEmail(), cc, "Xác nhận đặt hàng thành công.", "Cảm ơn bé: " + customer.getCustomerName()  + " đã đặt sản phẩm." +
-                        " Đơn hàng đang được đóng gói và sẽ chuyển tới bạn sớm nhất.");
+//                emailSendService.sendMail(customer.getEmail(), cc, "Xác nhận đặt hàng thành công.", "Cảm ơn bé: " + customer.getCustomerName()  + " đã đặt sản phẩm." +
+//                        " Đơn hàng đang được đóng gói và sẽ chuyển tới bạn sớm nhất.");
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("OK", "Successfully", orderModel));
             } else {

@@ -1,7 +1,5 @@
 package com.hairsalon.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hairsalon.entity.*;
 import com.hairsalon.model.*;
 import com.hairsalon.respository.imp.*;
@@ -10,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +16,7 @@ import java.util.TreeMap;
 @Service
 public class CustomerService {
     @Autowired
-    CustomerImp customerImp;
+    CustomerRepositoryImp customerImp;
 
 
 

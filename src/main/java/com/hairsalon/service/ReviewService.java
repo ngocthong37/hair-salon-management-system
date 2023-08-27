@@ -3,7 +3,7 @@ package com.hairsalon.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hairsalon.entity.*;
-import com.hairsalon.respository.imp.ReviewImp;
+import com.hairsalon.respository.imp.ReviewRepositoryImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReviewService {
     @Autowired
-    ReviewImp reviewImp;
+    ReviewRepositoryImp reviewImp;
 
     public ResponseEntity<Object> add(String json) {
         ObjectMapper objectMapper = new ObjectMapper();

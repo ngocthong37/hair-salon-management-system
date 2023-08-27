@@ -1,3 +1,4 @@
+/*
 package com.hairsalon.service;
 
 import com.hairsalon.respository.imp.EmailServiceImp;
@@ -14,3 +15,4 @@ public class EmailSendService {
     }
 
 }
+*/

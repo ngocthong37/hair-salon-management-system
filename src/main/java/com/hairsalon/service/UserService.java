@@ -2,7 +2,7 @@ package com.hairsalon.service;
 
 import com.hairsalon.entity.ResponseObject;
 import com.hairsalon.model.UserModel;
-import com.hairsalon.respository.imp.UserImp;
+import com.hairsalon.respository.imp.UserRepositoryImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import java.util.TreeMap;
 @Service
 public class UserService {
     @Autowired
-    UserImp userImp;
+    UserRepositoryImp userImp;
 
     public ResponseEntity<ResponseObject> findAll() {
         Map<String, Object> results = new TreeMap<String, Object>();

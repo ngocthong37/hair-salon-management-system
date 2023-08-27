@@ -1,6 +1,6 @@
 package com.hairsalon.constants;
 
-import com.hairsalon.respository.imp.MessageImp;
+import com.hairsalon.respository.imp.MessageRepositoryImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class Message {
     @Autowired
-    MessageImp messageRepositoryImpl;
+    MessageRepositoryImp messageRepositoryImpl;
 
     public String getMessage(Integer id) {
         return messageRepositoryImpl.getMessage(id);
