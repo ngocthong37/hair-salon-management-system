@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.hairsalon.entity.*;
 import com.hairsalon.model.*;
-import com.hairsalon.respository.imp.ProductRepositoryImp;
+import com.hairsalon.respository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +18,9 @@ import java.util.*;
 public class ProductService {
     @Autowired
     ProductRepositoryImp productImp;
+
+    @Autowired
+    ProductRepository productRepository;
 
     public ResponseEntity<ResponseObject> findAll() {
         Map<String, Object> results = new TreeMap<String, Object>();
@@ -59,10 +62,7 @@ public class ProductService {
             product.setCategory(category);
             product.setImageUrl(imageUrl);
             product.setDescription(description);
-            if (productImp.add(product) < 0) {
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("ERROR", "Have error when add product", ""));
-            }
+            productRepository.save(product);
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
@@ -88,10 +88,7 @@ public class ProductService {
             product.setCategory(category);
             product.setImageUrl(imageUrl);
             product.setDescription(description);
-            if (productImp.update(product) < 0) {
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("ERROR", "Have error when update product", ""));
-            }
+            productRepository.save(product);
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));

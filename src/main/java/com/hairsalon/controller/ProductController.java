@@ -14,17 +14,16 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
-
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<ResponseObject> findAll() {
         return productService.findAll();
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> findAllByCateId(@PathVariable Integer id) {
         return productService.findAllByCateId(id);
     }
-
     @PostMapping("/add")
     public ResponseEntity<Object> addProduct(@RequestBody String json) {
         return productService.add(json);

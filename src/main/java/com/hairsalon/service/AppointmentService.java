@@ -37,8 +37,8 @@ public class AppointmentService {
     @Autowired
     private AppointmentStatusRepositoryImp appointmentStatusImp;
 
-//    @Autowired
-//    private EmailSendService emailSendService;
+    @Autowired
+    private EmailSendService emailSendService;
 
     @Autowired
     private UserRepositoryImp userImpl;
@@ -131,9 +131,9 @@ public class AppointmentService {
             String[] cc = {"n20dccn152@student.ptithcm.edu.vn"};
 
             if (messageId != 0) {
-//                emailSendService.sendMail(customer.getEmail(), cc, "Lịch hẹn của bạn đã được " +
-//                        "ghi lại", "Cảm ơn bé: " + customer.getCustomerName()  + " đã tin tưởng dịch vụ của chúng tôi." +
-//                        " Vui lòng để ý điện thoại để nhận được những thông báo sớm nhất.");
+                emailSendService.sendMail(customer.getEmail(), cc, "Lịch hẹn của bạn đã được " +
+                        "ghi lại", "Cảm ơn bé: " + customer.getCustomerName()  + " đã tin tưởng dịch vụ của chúng tôi." +
+                        " Vui lòng để ý điện thoại để nhận được những thông báo sớm nhất.");
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("OK", "Successfully", appointmentModel));
             } else {

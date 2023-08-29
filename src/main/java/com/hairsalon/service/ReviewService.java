@@ -46,7 +46,7 @@ public class ReviewService {
                         .body(new ResponseObject("OK", "Successfully", ""));
             } else {
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("ERROR", "Can not make an appointment", ""));
+                        .body(new ResponseObject("ERROR", "Can not make an review", ""));
             }
 
         }

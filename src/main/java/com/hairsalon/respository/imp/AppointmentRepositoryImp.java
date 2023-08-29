@@ -27,7 +27,7 @@ public class AppointmentRepositoryImp implements IAppointmentRepository {
 
     @Override
     public List<AppointmentModel> getAll() {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.openSession();
         List<AppointmentModel> appointmentModelList = new ArrayList<>();
         Set<Appointment> appointmentSet = new LinkedHashSet<Appointment>();
         String hql = "FROM Appointment";

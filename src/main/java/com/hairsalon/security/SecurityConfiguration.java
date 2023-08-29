@@ -10,20 +10,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import static com.hairsalon.Enum.Permission.ADMIN_CREATE;
-import static com.hairsalon.Enum.Permission.ADMIN_DELETE;
-import static com.hairsalon.Enum.Permission.ADMIN_READ;
-import static com.hairsalon.Enum.Permission.ADMIN_UPDATE;
-import static com.hairsalon.Enum.Permission.MANAGER_CREATE;
-import static com.hairsalon.Enum.Permission.MANAGER_DELETE;
-import static com.hairsalon.Enum.Permission.MANAGER_READ;
-import static com.hairsalon.Enum.Permission.MANAGER_UPDATE;
+
+import static com.hairsalon.Enum.Permission.*;
 import static com.hairsalon.Enum.Role.ADMIN;
 import static com.hairsalon.Enum.Role.MANAGER;
-import static org.springframework.http.HttpMethod.DELETE;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -42,8 +33,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers(
                         "/api/v1/auth/**",
-                        "/v2/api-docs",
-                        "/v3/api-docs",
+                        "/api/v1/appointments/**",
                         "/v3/api-docs/**",
                         "/swagger-resources",
                         "/swagger-resources/**",
@@ -55,24 +45,11 @@ public class SecurityConfiguration {
                 )
                 .permitAll()
 
-
                 .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
-
-
                 .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
-                .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
-                .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
-                .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
-
-
-                /* .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
-
-                 .requestMatchers(GET, "/api/v1/admin/**").hasAuthority(ADMIN_READ.name())
-                 .requestMatchers(POST, "/api/v1/admin/**").hasAuthority(ADMIN_CREATE.name())
-                 .requestMatchers(PUT, "/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.name())
-                 .requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())*/
-
-
+                .requestMatchers("/api/v1/products/**").hasAnyRole(ADMIN.name(), MANAGER.name())
+                .requestMatchers(POST, "/api/v1/products/**").hasAnyAuthority(MANAGER_CREATE.name(), ADMIN_CREATE.name())
+                .requestMatchers(PUT, "/api/v1/products/**").hasAnyAuthority(MANAGER_UPDATE.name(), ADMIN_UPDATE.name())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -82,7 +59,6 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
         ;
-
         return http.build();
     }
 }

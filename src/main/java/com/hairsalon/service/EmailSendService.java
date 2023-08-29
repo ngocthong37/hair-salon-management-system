@@ -1,18 +1,16 @@
-/*
 package com.hairsalon.service;
 
-import com.hairsalon.respository.imp.EmailServiceImp;
+import com.hairsalon.respository.imp.EmailServiceRepositoryImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailSendService {
     @Autowired
-    EmailServiceImp emailServiceImp;
+    EmailServiceRepositoryImp emailServiceRepositoryImp;
 
     public String sendMail(String to, String[] cc, String subject, String body) {
-        return emailServiceImp.sendMail(to, cc, subject, body);
+        return emailServiceRepositoryImp.sendMail(to, cc, subject, body);
     }
 
 }
-*/

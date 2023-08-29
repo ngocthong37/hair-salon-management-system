@@ -26,7 +26,7 @@ public class RevenueRepositoryImp implements IRevenueRepository {
         StringBuilder hql = new StringBuilder("Select SUM(SH.price) from Appointment A INNER" +
                 " JOIN ServiceHair SH ON A.serviceHair.id = SH.id AND A.appointmentStatus.id = 3");
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = sessionFactory.openSession();
             Query query = session.createQuery(hql.toString());
             res = (Double) query.getSingleResult();
         }

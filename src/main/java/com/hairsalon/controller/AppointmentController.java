@@ -4,6 +4,7 @@ import com.hairsalon.entity.ResponseObject;
 import com.hairsalon.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,8 +33,8 @@ public class AppointmentController {
     ResponseEntity<ResponseObject> getAllByCustomerId(@PathVariable Integer id) {
         return appointmentService.getAllByCustomerId(id);
     }
-
     @PutMapping("/update-status")
+    @PreAuthorize("hasAuthority('manager:update')")
     ResponseEntity<Object> updateStatusCodeAppointment(@RequestBody String json) {
         return appointmentService.updateStatusAppointment(json);
     }
