@@ -18,7 +18,6 @@ public class RevenueRepositoryImp implements IRevenueRepository {
     @Autowired
     SessionFactory sessionFactory;
 
-    private static final Logger LOGGER = (Logger) LoggerFactory.getLogger(ServiceHairRepositoryImp.class);
 
     @Override
     public Double getRevenueFromService() {
@@ -31,7 +30,7 @@ public class RevenueRepositoryImp implements IRevenueRepository {
             res = (Double) query.getSingleResult();
         }
         catch (Exception e) {
-            LOGGER.error("Error has occurred in Impl getRevenueFromService API: "+e,e);
+
         }
         if (res == null) {
             return 0.0;
@@ -50,7 +49,7 @@ public class RevenueRepositoryImp implements IRevenueRepository {
             res = (Double) query.getSingleResult();
         }
         catch (Exception e) {
-            LOGGER.error("Error has occurred in Impl getRevenueFromProduct: "+e,e);
+
         }
         if (res == null) {
             return 0.0;
@@ -70,7 +69,7 @@ public class RevenueRepositoryImp implements IRevenueRepository {
             res = (Double) query.getSingleResult();
         }
         catch (Exception e) {
-            LOGGER.error("Error has occurred in Impl getRevenueFromService API: "+e,e);
+
         }
         if (res == null) {
             return 0.0;
@@ -92,7 +91,7 @@ public class RevenueRepositoryImp implements IRevenueRepository {
             res = (Double) query.getSingleResult();
         }
         catch (Exception e) {
-            LOGGER.error("Error has occurred in Impl getRevenueFromService API: "+e,e);
+
         }
         if (res == null) {
             return 0.0;

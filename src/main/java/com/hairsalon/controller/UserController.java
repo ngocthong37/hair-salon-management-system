@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/api/v1/")
+@RequestMapping(path = "/api/v1/users/")
 public class UserController {
 
     @Autowired
@@ -18,7 +18,7 @@ public class UserController {
     @Autowired
     OrderService orderService;
 
-    @GetMapping("users")
+    @GetMapping("findAll")
     public ResponseEntity<ResponseObject> findAllUser() {
         return userService.findAll();
     }

@@ -33,7 +33,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers(
                         "/api/v1/auth/**",
-                        "/api/v1/appointments/**",
+                        "/api/v1/services/**",
                         "/v3/api-docs/**",
                         "/swagger-resources",
                         "/swagger-resources/**",
@@ -44,12 +44,9 @@ public class SecurityConfiguration {
                         "/swagger-ui.html"
                 )
                 .permitAll()
-
                 .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
                 .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
-                .requestMatchers("/api/v1/products/**").hasAnyRole(ADMIN.name(), MANAGER.name())
-                .requestMatchers(POST, "/api/v1/products/**").hasAnyAuthority(MANAGER_CREATE.name(), ADMIN_CREATE.name())
-                .requestMatchers(PUT, "/api/v1/products/**").hasAnyAuthority(MANAGER_UPDATE.name(), ADMIN_UPDATE.name())
+
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -58,6 +55,7 @@ public class SecurityConfiguration {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout()
         ;
         return http.build();
     }

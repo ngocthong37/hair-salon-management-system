@@ -37,8 +37,6 @@ public class Order {
     private OrderStatus orderStatus;
     @Column(name = "order_date")
     private LocalDate orderDate;
-
-
     @JsonIgnore
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, orphanRemoval = true,
             cascade = CascadeType.ALL)

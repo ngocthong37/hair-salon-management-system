@@ -16,16 +16,15 @@ import java.util.*;
 @Transactional
 @Service
 public class ProductService {
-    @Autowired
-    ProductRepositoryImp productImp;
+
 
     @Autowired
     ProductRepository productRepository;
 
     public ResponseEntity<ResponseObject> findAll() {
         Map<String, Object> results = new TreeMap<String, Object>();
-        List<ProductModel> productList = new ArrayList<>();
-        productList = productImp.findAll();
+        List<Product> productList = new ArrayList<>();
+        productList = productRepository.findAll();
         results.put("productList", productList);
         if (results.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
@@ -34,10 +33,10 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<ResponseObject> findAllByCateId(Integer id) {
+    public ResponseEntity<ResponseObject> findAllByCateId(Integer categoryId) {
         Map<String, Object> results = new TreeMap<String, Object>();
-        List<ProductModel> productList = new ArrayList<>();
-        productList = productImp.findAllByCategoryId(id);
+        List<Optional> productList = new ArrayList<>();
+        productList = productRepository.findByCategoryId(categoryId);
         results.put("productList", productList);
         if (results.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));

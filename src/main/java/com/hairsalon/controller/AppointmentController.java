@@ -9,32 +9,27 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping(path = "/api/v1/appointments")
+@RequestMapping(path = "/api/v1/")
 public class AppointmentController {
     @Autowired
     AppointmentService appointmentService;
 
-    @GetMapping("")
-    ResponseEntity<ResponseObject> getAll() {
+    @GetMapping("management/appointments/findAll")
+    ResponseEntity<ResponseObject> findAll() {
         return appointmentService.getAll();
     }
 
-    @PostMapping("/makeApm")
+    @PostMapping("appointments/makeApm")
     ResponseEntity<Object> makeAppointment(@RequestBody String json) {
-        return appointmentService.makeAppointment(json);
+            return appointmentService.makeAppointment(json);
     }
 
-    @GetMapping("/{statusId}")
+    @GetMapping("management/appointments/{statusId}")
     ResponseEntity<ResponseObject> getAllByStatusId(@PathVariable Integer statusId) {
         return appointmentService.getAllByStatusId(statusId);
     }
 
-    @GetMapping("/customer/{id}")
-    ResponseEntity<ResponseObject> getAllByCustomerId(@PathVariable Integer id) {
-        return appointmentService.getAllByCustomerId(id);
-    }
-    @PutMapping("/update-status")
-    @PreAuthorize("hasAuthority('manager:update')")
+    @PutMapping("management/update-status")
     ResponseEntity<Object> updateStatusCodeAppointment(@RequestBody String json) {
         return appointmentService.updateStatusAppointment(json);
     }

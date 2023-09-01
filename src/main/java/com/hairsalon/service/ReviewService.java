@@ -3,7 +3,7 @@ package com.hairsalon.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hairsalon.entity.*;
-import com.hairsalon.respository.imp.ReviewRepositoryImp;
+import com.hairsalon.respository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReviewService {
     @Autowired
-    ReviewRepositoryImp reviewImp;
+    ReviewRepository reviewRepository;
 
     public ResponseEntity<Object> add(String json) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -40,14 +40,14 @@ public class ReviewService {
             review.setRatingValue(rating);
             review.setComment(comment);
 
-            Integer messageId = reviewImp.add(review);
-            if (messageId != 0) {
+            reviewRepository.save(review);
+//            if (messageId != 0) {
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("OK", "Successfully", ""));
-            } else {
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("ERROR", "Can not make an review", ""));
-            }
+//            } else {
+//                return ResponseEntity.status(HttpStatus.OK)
+//                        .body(new ResponseObject("ERROR", "Can not make an review", ""));
+//            }
 
         }
         catch (Exception e) {

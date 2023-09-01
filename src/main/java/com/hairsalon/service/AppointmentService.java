@@ -5,6 +5,7 @@ import com.hairsalon.model.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.hairsalon.respository.*;
 import com.hairsalon.respository.imp.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,36 +19,37 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 @Service
 public class AppointmentService {
     @Autowired
-    private AppointmentRepositoryImp appointmentImpl;
+    private AppointmentRepository appointmentRepository;
 
     @Autowired
-    private CustomerRepositoryImp customerImp;
+    private CustomerRepository customerRepository;
 
     @Autowired
-    private SalonRepositoryImp salonImp;
+    private SalonRepository salonRepository;
 
     @Autowired
-    private ServiceHairRepositoryImp serviceHairImp;
+    private ServiceHairRepository serviceHairRepository;
 
     @Autowired
-    private AppointmentStatusRepositoryImp appointmentStatusImp;
+    private AppointmentStatusRepository appointmentStatusRepository;
 
     @Autowired
     private EmailSendService emailSendService;
 
     @Autowired
-    private UserRepositoryImp userImpl;
+    private UserRepository userRepository;
 
 
     public ResponseEntity<ResponseObject> getAll() {
         Map<String, Object> results = new TreeMap<String, Object>();
-        List<AppointmentModel> appointmentList = null;
-        appointmentList = appointmentImpl.getAll();
+        List<Appointment> appointmentList = null;
+        appointmentList = appointmentRepository.findAll();
         results.put("appointmentList", appointmentList);
 
         if (results.size() > 0) {
@@ -59,7 +61,6 @@ public class AppointmentService {
 
     public ResponseEntity<Object> makeAppointment(String json) {
         ObjectMapper objectMapper = new ObjectMapper();
-        AppointmentModel appointmentModel = new AppointmentModel();
 
         try {
             if (json == null || json.isEmpty()) {
@@ -67,14 +68,14 @@ public class AppointmentService {
                         .body(new ResponseObject("ERROR", "Empty JSON", ""));
             }
             JsonNode jsonObjectAppointment = objectMapper.readTree(json);
-            Integer customerId = jsonObjectAppointment.get("customer") != null ?
-                    Integer.parseInt(jsonObjectAppointment.get("customer").asText()) : 1;
-            Integer serviceId = jsonObjectAppointment.get("service") != null ?
-                    jsonObjectAppointment.get("service").asInt() : 1;
-            Integer statusId = jsonObjectAppointment.get("status") != null ?
-                    jsonObjectAppointment.get("status").asInt() : 1;
-            Integer salonId = jsonObjectAppointment.get("salon") != null ?
-                    jsonObjectAppointment.get("salon").asInt() : 1;
+            Integer customerId = jsonObjectAppointment.get("customerId") != null ?
+                    Integer.parseInt(jsonObjectAppointment.get("customerId").asText()) : 1;
+            Integer serviceId = jsonObjectAppointment.get("serviceId") != null ?
+                    jsonObjectAppointment.get("serviceId").asInt() : 1;
+            Integer statusId = jsonObjectAppointment.get("statusId") != null ?
+                    jsonObjectAppointment.get("statusId").asInt() : 1;
+            Integer salonId = jsonObjectAppointment.get("salonId") != null ?
+                    jsonObjectAppointment.get("salonId").asInt() : 1;
             String appointmentDate = jsonObjectAppointment.get("appointmentDate") != null ?
                     jsonObjectAppointment.get("appointmentDate").asText() : "";
             String appointmentTime = jsonObjectAppointment.get("appointmentTime") != null ?
@@ -84,28 +85,32 @@ public class AppointmentService {
 
             Appointment appointment = new Appointment();
 
-            CustomerModel customerModel = customerImp.findById(customerId);
+            Optional<Customer> customerModel = customerRepository.findById(customerId);
             Customer customer = new Customer();
-            customer.setId(customerModel.getId());
-            customer.setCustomerName(customerModel.getCustomerName());
-            customer.setEmail(customerModel.getEmail());
+            customer.setId(customerModel.get().getId());
+            customer.setCustomerName(customerModel.get().getCustomerName());
+            customer.setEmail(customerModel.get().getEmail());
 
-            SalonModel salonModel = salonImp.findById(salonId);
+            Optional<Salon> salonModel = salonRepository.findById(salonId);
             Salon salon = new Salon();
-            salon.setId(salonModel.getId());
-            salon.setSalonName(salonModel.getSalonName());
+            salon.setId(salonModel.get().getId());
+            salon.setSalonName(salonModel.get().getSalonName());
 
-            HairServiceModel hairServiceModel = serviceHairImp.findById(serviceId);
+            Optional<ServiceHair> hairServiceModel = serviceHairRepository.findById(serviceId);
             ServiceHair serviceHair = new ServiceHair();
-            serviceHair.setId(hairServiceModel.getId());
-            serviceHair.setServiceName(hairServiceModel.getServiceName());
+            serviceHair.setId(hairServiceModel.get().getId());
+            serviceHair.setServiceName(hairServiceModel.get().getServiceName());
 
-            AppointmentStatusModel appointmentStatusModel = appointmentStatusImp.findById(statusId);
+            Optional<AppointmentStatus> appointmentStatusModel = appointmentStatusRepository.findById(statusId);
             AppointmentStatus appointmentStatus = new AppointmentStatus();
-            appointmentStatus.setId(appointmentStatusModel.getId());
-            appointmentStatus.setStatus(appointmentStatusModel.getStatus());
+            appointmentStatus.setId(appointmentStatusModel.get().getId());
+            appointmentStatus.setStatus(appointmentStatusModel.get().getStatus());
 
-            User user = userImpl.findById(userId);
+            Optional<User> user = userRepository.findById(userId);
+            User newUser = new User();
+            newUser.setId(user.get().getId());
+            newUser.setUserName(user.get().getUsername());
+            newUser.setRole(user.get().getRole());
 
 
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -118,24 +123,24 @@ public class AppointmentService {
             appointment.setCustomer(customer);
             appointment.setServiceHair(serviceHair);
             appointment.setAppointmentStatus(appointmentStatus);
-            appointment.setUser(user);
 
             LocalDateTime now = LocalDateTime.now();
             Timestamp timestamp = Timestamp.valueOf(now);
             appointment.setCreateAt(timestamp);
             appointment.setUpdateAt(timestamp);
+            appointment.setUser(newUser);
 
-            Integer messageId = appointmentImpl.insert(appointment);
-            appointmentModel = appointmentImpl.findById(messageId);
+
+            Appointment savedAppointment = appointmentRepository.save(appointment);
 
             String[] cc = {"n20dccn152@student.ptithcm.edu.vn"};
 
-            if (messageId != 0) {
-                emailSendService.sendMail(customer.getEmail(), cc, "Lịch hẹn của bạn đã được " +
-                        "ghi lại", "Cảm ơn bé: " + customer.getCustomerName()  + " đã tin tưởng dịch vụ của chúng tôi." +
-                        " Vui lòng để ý điện thoại để nhận được những thông báo sớm nhất.");
+            if (savedAppointment.getAppointmentTime() != null) {
+//                emailSendService.sendMail(customer.getEmail(), cc, "Lịch hẹn của bạn đã được " +
+//                        "ghi lại", "Cảm ơn bé: " + customer.getCustomerName()  + " đã tin tưởng dịch vụ của chúng tôi." +
+//                        " Vui lòng để ý điện thoại để nhận được những thông báo sớm nhất.");
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("OK", "Successfully", appointmentModel));
+                        .body(new ResponseObject("OK", "Successfully", ""));
             } else {
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("ERROR", "Can not make an appointment", ""));
@@ -146,10 +151,10 @@ public class AppointmentService {
         }
     }
 
-    public ResponseEntity<ResponseObject> getAllByStatusId(Integer id) {
+    public ResponseEntity<ResponseObject> getAllByStatusId(Integer statusId) {
         Map<String, Object> results = new TreeMap<String, Object>();
-        List<AppointmentModel> appointmentList = null;
-        appointmentList = appointmentImpl.getAllByStatusId(id);
+        List<Appointment> appointmentList = null;
+        appointmentList = appointmentRepository.findAppointmentByStatusId(statusId);
         results.put("appointmentList", appointmentList);
 
         if (results.size() > 0) {
@@ -159,10 +164,10 @@ public class AppointmentService {
         }
     }
 
-    public ResponseEntity<ResponseObject> getAllByCustomerId(Integer id) {
+    public ResponseEntity<ResponseObject> getAllByCustomerId(Integer customerId) {
         Map<String, Object> results = new TreeMap<String, Object>();
-        List<AppointmentModel> appointmentList = null;
-        appointmentList = appointmentImpl.getAllByCustomerId(id);
+        List<Appointment> appointmentList = null;
+        appointmentList = appointmentRepository.findAppointmentByCustomerId(customerId);
         results.put("appointmentList", appointmentList);
 
         if (results.size() > 0) {
@@ -175,20 +180,24 @@ public class AppointmentService {
     public ResponseEntity<Object> updateStatusAppointment(String json) {
         JsonNode jsonNode;
         JsonMapper jsonMapper = new JsonMapper();
-        Integer statusCode;
-        Integer appointmentId;
+        int statusCode;
+        int appointmentId;
         try {
             jsonNode = jsonMapper.readTree(json);
-            appointmentId = jsonNode.get("appointmentId") != null ? jsonNode.get("appointmentId").asInt() : null;
+            appointmentId = jsonNode.get("appointmentId") != null ? jsonNode.get("appointmentId").asInt() : -1;
             statusCode = jsonNode.get("statusCode") != null ? jsonNode.get("statusCode").asInt() : -1;
-            Appointment appointment = new Appointment();
-            appointment = appointmentImpl.findAppointmentById(appointmentId);
-            AppointmentStatus appointmentStatus = new AppointmentStatus();
-            appointmentStatus.setId(statusCode);
-            appointmentStatus.setStatus("ON_HOLD");
-            appointment.setAppointmentStatus(appointmentStatus);
-            Integer id = appointmentImpl.updateStatusAppointment(appointment);
-            if (appointmentImpl.updateStatusAppointment(appointment) < 0) {
+            Optional<Appointment> optionalAppointment = appointmentRepository.findById(appointmentId);
+
+            if (optionalAppointment.isPresent()) {
+                Appointment appointment = optionalAppointment.get();
+
+                AppointmentStatus appointmentStatus = new AppointmentStatus();
+                appointmentStatus.setId(statusCode);
+
+                appointment.setAppointmentStatus(appointmentStatus);
+                appointmentRepository.save(appointment);
+            }
+            else {
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("ERROR", "Have error when update status code appointment", ""));
             }

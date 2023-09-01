@@ -2,14 +2,11 @@ package com.hairsalon.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.hairsalon.entity.Category;
 import com.hairsalon.entity.Product;
 import com.hairsalon.entity.ProductItem;
 import com.hairsalon.entity.ResponseObject;
-import com.hairsalon.model.AppointmentModel;
-import com.hairsalon.model.HairServiceModel;
 import com.hairsalon.model.ProductItemModel;
-import com.hairsalon.respository.imp.ProductItemImp;
+import com.hairsalon.respository.ProductItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +20,12 @@ import java.util.TreeMap;
 @Service
 public class ProductItemService {
     @Autowired
-    private ProductItemImp productItemImp;
+    private ProductItemRepository productItemRepository;
 
     public ResponseEntity<ResponseObject> findAll() {
         Map<String, Object> results = new TreeMap<String, Object>();
-        List<ProductItemModel> productItemModelList = new ArrayList<>();
-        productItemModelList = productItemImp.findAll();
+        List<ProductItem> productItemModelList = new ArrayList<>();
+        productItemModelList = productItemRepository.findAll();
         results.put("productItemList", productItemModelList);
 
         if (results.size() > 0) {
@@ -61,10 +58,10 @@ public class ProductItemService {
             productItem.setQuantityInStock(quantity);
             productItem.setStatus(status);
             productItem.setWarrantyTime(warrantyTime);
-            if (productItemImp.add(productItem) < 0) {
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("ERROR", "Have error when add product item", ""));
-            }
+//            if (productItemImp.add(productItem) < 0) {
+//                return ResponseEntity.status(HttpStatus.OK)
+//                        .body(new ResponseObject("ERROR", "Have error when add product item", ""));
+//            }
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
@@ -94,10 +91,10 @@ public class ProductItemService {
             productItem.setQuantityInStock(quantity);
             productItem.setStatus(status);
             productItem.setWarrantyTime(warrantyTime);
-            if (productItemImp.update(productItem) < 0) {
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("ERROR", "Have error when update product item", ""));
-            }
+//            if (productItemImp.update(productItem) < 0) {
+//                return ResponseEntity.status(HttpStatus.OK)
+//                        .body(new ResponseObject("ERROR", "Have error when update product item", ""));
+//            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
         }
@@ -108,7 +105,7 @@ public class ProductItemService {
         List<ProductItemModel> productItemModelList = new ArrayList<>();
         try {
             Map<String, Object> results = new TreeMap<String, Object>();
-            productItemModelList = productItemImp.findByProductItemName(productItemName);
+           // productItemModelList = productItemImp.findByProductItemName(productItemName);
             results.put("productItemList", productItemModelList);
             if (results.size() > 0) {
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));

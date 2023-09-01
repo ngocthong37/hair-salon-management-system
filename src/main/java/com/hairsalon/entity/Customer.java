@@ -2,6 +2,7 @@ package com.hairsalon.entity;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,22 +28,27 @@ public class Customer {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, orphanRemoval = true,
             cascade = CascadeType.ALL)
     private Collection<Appointment> appointments;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, orphanRemoval = true,
             cascade = CascadeType.ALL)
     private Collection<CustomerAddress> customerAddresses;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, orphanRemoval = true,
             cascade = CascadeType.ALL)
     private Collection<PaymentMethod> paymentMethods;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, orphanRemoval = true,
             cascade = CascadeType.ALL)
     private Collection<Review> reviews;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, orphanRemoval = true,
             cascade = CascadeType.ALL)
     private Collection<Order> orders;

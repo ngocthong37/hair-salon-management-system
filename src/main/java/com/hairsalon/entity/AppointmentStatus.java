@@ -22,6 +22,6 @@ public class AppointmentStatus {
     @Column(name = "status")
     private String status;
     @JsonIgnore
-    @OneToMany(mappedBy = "appointmentStatus", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "appointmentStatus", fetch = FetchType.EAGER, cascade = CascadeType.MERGE, orphanRemoval = true)
     private Collection<Appointment> appointments;
 }

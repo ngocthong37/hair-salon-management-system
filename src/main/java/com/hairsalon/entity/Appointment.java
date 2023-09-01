@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,7 +33,7 @@ public class Appointment {
     private ServiceHair serviceHair;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "apm_status_id")
     private AppointmentStatus appointmentStatus;
 
