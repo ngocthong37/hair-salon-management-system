@@ -79,15 +79,23 @@ public class ProductService {
             String description = jsonNode.get("description") != null ? jsonNode.get("description").asText() : "";
             String imageUrl = jsonNode.get("imageUrl") != null ? jsonNode.get("imageUrl").asText() : "";
             Integer categoryId = jsonNode.get("categoryId") != null ? jsonNode.get("categoryId").asInt() : -1;
-            Product product = new Product();
-            product.setId(id);
-            product.setName(productName);
-            Category category = new Category();
-            category.setId(categoryId);
-            product.setCategory(category);
-            product.setImageUrl(imageUrl);
-            product.setDescription(description);
-            productRepository.save(product);
+            Optional<Product> productOptional = productRepository.findById(id);
+
+            if (productOptional.isPresent()) {
+                Product product = productOptional.get();
+                product.setId(id);
+                product.setName(productName);
+                Category category = new Category();
+                category.setId(categoryId);
+                product.setCategory(category);
+                product.setImageUrl(imageUrl);
+                product.setDescription(description);
+                productRepository.save(product);
+            }
+            else {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("ERROR", "Have error when update product", ""));
+            }
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));

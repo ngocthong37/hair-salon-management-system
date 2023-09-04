@@ -29,7 +29,7 @@ public class AppointmentController {
         return appointmentService.getAllByStatusId(statusId);
     }
 
-    @PutMapping("management/update-status")
+    @PutMapping("management/appointments/update-status")
     ResponseEntity<Object> updateStatusCodeAppointment(@RequestBody String json) {
         return appointmentService.updateStatusAppointment(json);
     }

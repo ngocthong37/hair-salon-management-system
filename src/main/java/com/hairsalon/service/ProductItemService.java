@@ -12,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Service
 public class ProductItemService {
@@ -58,10 +55,12 @@ public class ProductItemService {
             productItem.setQuantityInStock(quantity);
             productItem.setStatus(status);
             productItem.setWarrantyTime(warrantyTime);
-//            if (productItemImp.add(productItem) < 0) {
-//                return ResponseEntity.status(HttpStatus.OK)
-//                        .body(new ResponseObject("ERROR", "Have error when add product item", ""));
-//            }
+
+            ProductItem saveProduct = productItemRepository.save(productItem);
+            if (saveProduct.getId() == null)
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("ERROR", "Have error when add product item", ""));
+
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
@@ -74,27 +73,27 @@ public class ProductItemService {
         JsonMapper jsonMapper = new JsonMapper();
         try {
             jsonNode = jsonMapper.readTree(json);
-            Integer id = jsonNode.get("id") != null ? jsonNode.get("id").asInt() : -1;
             String productName = jsonNode.get("productName") != null ? jsonNode.get("productName").asText() : "";
             Double price = jsonNode.get("price") != null ? jsonNode.get("price").asDouble() : null;
             Integer quantity = jsonNode.get("quantity") != null ? jsonNode.get("quantity").asInt() : -1;
-            Integer productId = jsonNode.get("productId") != null ? jsonNode.get("productId").asInt() : -1;
-            Integer warrantyTime = jsonNode.get("quantity") != null ? jsonNode.get("quantity").asInt() : -1;
+            Integer productItemId = jsonNode.get("productItemId") != null ? jsonNode.get("productItemId").asInt() : -1;
+            Integer warrantyTime = jsonNode.get("warrantyTime") != null ? jsonNode.get("warrantyTime").asInt() : -1;
             String status = jsonNode.get("status") != null ? jsonNode.get("status").asText() : "";
-            ProductItem productItem = new ProductItem();
-            productItem.setProductName(productName);
-            Product product = new Product();
-            product.setId(productId);
-            productItem.setId(id);
-            productItem.setPrice(price);
-            productItem.setStatus(status);
-            productItem.setQuantityInStock(quantity);
-            productItem.setStatus(status);
-            productItem.setWarrantyTime(warrantyTime);
-//            if (productItemImp.update(productItem) < 0) {
-//                return ResponseEntity.status(HttpStatus.OK)
-//                        .body(new ResponseObject("ERROR", "Have error when update product item", ""));
-//            }
+            Optional<ProductItem> productItemOptional = productItemRepository.findById(productItemId);
+
+            if (productItemOptional.isPresent()) {
+                ProductItem productItem = productItemOptional.get();
+                productItem.setProductName(productName);
+                productItem.setPrice(price);
+                productItem.setWarrantyTime(warrantyTime);
+                productItem.setQuantityInStock(quantity);
+                productItem.setStatus(status);
+                productItemRepository.save(productItem);
+            }
+            else {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("ERROR", "Have error when update product item", ""));
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
         }
@@ -102,11 +101,10 @@ public class ProductItemService {
     }
 
     public ResponseEntity<ResponseObject> findByProductItemName(String productItemName) {
-        List<ProductItemModel> productItemModelList = new ArrayList<>();
         try {
             Map<String, Object> results = new TreeMap<String, Object>();
-           // productItemModelList = productItemImp.findByProductItemName(productItemName);
-            results.put("productItemList", productItemModelList);
+            List<ProductItem> productItemList = productItemRepository.findByProductName(productItemName);
+            results.put("productItemList", productItemList);
             if (results.size() > 0) {
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
             }

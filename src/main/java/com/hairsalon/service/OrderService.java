@@ -166,24 +166,26 @@ public class OrderService {
         JsonMapper jsonMapper = new JsonMapper();
         Integer statusCode;
         Integer orderId;
-//        try {
-//            jsonNode = jsonMapper.readTree(json);
-//            orderId = jsonNode.get("orderId") != null ? jsonNode.get("orderId").asInt() : null;
-//            statusCode = jsonNode.get("statusCode") != null ? jsonNode.get("statusCode").asInt() : -1;
-//            Order order = new Order();
-//            order = orderImp.findOrderById(orderId);
-//            OrderStatus orderStatus = new OrderStatus();
-//            orderStatus.setId(statusCode);
-//            order.setOrderStatus(orderStatus);
-//            Integer messageId = orderImp.updateStatusOrder(order);
-//            if (orderImp.updateStatusOrder(order) < 0) {
-//                return ResponseEntity.status(HttpStatus.OK)
-//                        .body(new ResponseObject("ERROR", "Have error when update status code order", ""));
-//            }
-//        }
-//        catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
-//        }
+        try {
+            jsonNode = jsonMapper.readTree(json);
+            orderId = jsonNode.get("orderId") != null ? jsonNode.get("orderId").asInt() : null;
+            statusCode = jsonNode.get("statusCode") != null ? jsonNode.get("statusCode").asInt() : -1;
+            Optional<Order> orderOptional = orderRepository.findById(orderId);
+
+            if (orderOptional.isPresent()) {
+                Order order = orderOptional.get();
+                OrderStatus orderStatus = new OrderStatus();
+                orderStatus.setId(statusCode);
+                order.setOrderStatus(orderStatus);
+                orderRepository.save(order);
+            }
+            else
+                return ResponseEntity.status(HttpStatus.OK)
+                            .body(new ResponseObject("ERROR", "Have error when update status code order", ""));
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
+        }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", ""));
     }
 
