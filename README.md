@@ -9,6 +9,8 @@ The application uses Spring Boot to write API for the hair salon management appl
 * Email notification when booking, ordering
 * Search for services and products
 * User authentication using JWT
+* Write commmets, rate about products, services
+* Statistics on revenue by month and year by service and product sales 
 * UNIT Test(developing)
 * Logout(developing)
 
