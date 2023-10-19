@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -25,7 +26,17 @@ public class ProductService {
         Map<String, Object> results = new TreeMap<String, Object>();
         List<Product> productList = new ArrayList<>();
         productList = productRepository.findAll();
-        results.put("productList", productList);
+        List<ProductModel> productModelList = productList.stream()
+                .map(product -> {
+                    ProductModel productModel = new ProductModel();
+                    productModel.setId(product.getId());
+                    productModel.setProductName(product.getName());
+                    productModel.setDescription(product.getDescription());
+                    productModel.setImageUrl(product.getImageUrl());
+                    return productModel;
+                })
+                .collect(Collectors.toList());
+        results.put("productModelList", productModelList);
         if (results.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
         } else {

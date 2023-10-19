@@ -24,7 +24,6 @@ public class ProductItemService {
         List<ProductItem> productItemModelList = new ArrayList<>();
         productItemModelList = productItemRepository.findAll();
         results.put("productItemList", productItemModelList);
-
         if (results.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
         } else {

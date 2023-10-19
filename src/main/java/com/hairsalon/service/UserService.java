@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -23,7 +24,17 @@ public class UserService {
         Map<String, Object> results = new TreeMap<String, Object>();
         List<User> userList = new ArrayList<>();
         userList = userRepository.findAll();
-        results.put("userList", userList);
+        List<UserModel> userModelList = userList.stream()
+                .map(user -> {
+                    UserModel userModel = new UserModel();
+                    userModel.setId(user.getId());
+                    userModel.setUserName(user.getUsername());
+                    userModel.setEmail(user.getEmail());
+                    return userModel;
+                })
+                .collect(Collectors.toList());
+
+        results.put("userList", userModelList);
         if (results.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
         } else {

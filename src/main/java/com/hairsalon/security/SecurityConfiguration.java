@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                 .requestMatchers(
                         "/api/v1/auth/**",
                         "/api/v1/services/**",
+                        "/api/v1/products/**",
                         "/v3/api-docs/**",
                         "/swagger-resources",
                         "/swagger-resources/**",
@@ -46,7 +47,6 @@ public class SecurityConfiguration {
                 .permitAll()
                 .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
                 .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
-
                 .anyRequest()
                 .authenticated()
                 .and()

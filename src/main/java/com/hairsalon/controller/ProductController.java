@@ -14,7 +14,7 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
-    @GetMapping
+    @GetMapping("products/findAll")
     public ResponseEntity<ResponseObject> findAll() {
         return productService.findAll();
     }
@@ -24,12 +24,12 @@ public class ProductController {
     public ResponseEntity<ResponseObject> findAllByCateId(@PathVariable Integer id) {
         return productService.findAllByCateId(id);
     }
-    @PostMapping("management/products/add")
+    @PostMapping("products/add")
     public ResponseEntity<Object> addProduct(@RequestBody String json) {
         return productService.add(json);
     }
 
-    @PutMapping("management/products/update")
+    @PutMapping("products/update")
     public ResponseEntity<Object> updateProduct(@RequestBody String json) {
         return productService.update(json);
     }

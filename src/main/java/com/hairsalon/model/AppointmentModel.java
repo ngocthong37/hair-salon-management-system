@@ -16,11 +16,11 @@ import java.time.LocalTime;
 
 public class AppointmentModel {
     private Integer id;
-    private CustomerModel customerModel;
+    private String customerName;
     private LocalDate appointmentDate;
     private LocalTime appointmentTime;
-    private HairServiceModel hairServiceModel;
-    private AppointmentStatusModel appointmentStatusModel;
-    private SalonModel salonModel;
-    private UserModel userModel;
+    private String serviceName;
+    private String status;
+    private String salonName;
+    private String userName;
 }

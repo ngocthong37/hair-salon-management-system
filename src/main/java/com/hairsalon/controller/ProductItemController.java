@@ -8,29 +8,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(path = "/api/v1/")
 public class ProductItemController {
 
     @Autowired
     private ProductItemService productItemService;
 
-    @GetMapping("/productItem/all")
+    @GetMapping("productItem/findAll")
     public ResponseEntity<ResponseObject> findAll() {
         return productItemService.findAll();
     }
 
-    @PostMapping("management/productItem/add")
+    @PostMapping("productItem/add")
     public ResponseEntity<Object> addProductItem(@RequestBody String json) {
         return productItemService.add(json);
     }
 
-    @PutMapping("management/productItem/update")
+    @PutMapping("productItem/update")
     public ResponseEntity<Object> updateProductItem(@RequestBody String json) {
         return productItemService.update(json);
     }
 
-    @GetMapping("/productItem/{productItemName}")
+    @GetMapping("productItem/{productItemName}")
     public ResponseEntity<ResponseObject> findAllByProductItemName(@PathVariable String productItemName) {
         return productItemService.findByProductItemName(productItemName);
     }

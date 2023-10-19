@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 @Service
 public class AppointmentService {
@@ -50,7 +51,22 @@ public class AppointmentService {
         Map<String, Object> results = new TreeMap<String, Object>();
         List<Appointment> appointmentList = null;
         appointmentList = appointmentRepository.findAll();
-        results.put("appointmentList", appointmentList);
+
+        List<AppointmentModel> appointmentModelList = appointmentList.stream()
+                        .map(appointment -> {
+                            AppointmentModel appointmentModel = new AppointmentModel();
+                            appointmentModel.setId(appointment.getId());
+                            appointmentModel.setCustomerName(appointment.getCustomer().getCustomerName());
+                            appointmentModel.setAppointmentTime(appointment.getAppointmentTime());
+                            appointmentModel.setAppointmentDate(appointment.getAppointmentDate());
+                            appointmentModel.setSalonName(appointment.getSalon().getSalonName());
+                            appointmentModel.setUserName(appointment.getCustomer().getCustomerName());
+                            appointmentModel.setServiceName(appointment.getServiceHair().getServiceName());
+                            appointmentModel.setStatus(appointment.getAppointmentStatus().getStatus());
+                            return appointmentModel;
+                        }).collect(Collectors.toList());
+
+        results.put("appointmentList", appointmentModelList);
 
         if (results.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
