@@ -12,7 +12,6 @@ import jakarta.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "review")
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

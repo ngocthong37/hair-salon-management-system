@@ -15,7 +15,6 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "token")
 public class Token {
 
     @Id

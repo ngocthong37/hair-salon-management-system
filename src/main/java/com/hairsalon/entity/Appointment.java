@@ -17,7 +17,6 @@ import java.util.Optional;
 @Getter
 @Setter
 @Entity
-@Table(name = "appointment")
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

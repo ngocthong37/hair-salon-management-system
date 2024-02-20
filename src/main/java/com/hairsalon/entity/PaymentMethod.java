@@ -12,7 +12,6 @@ import jakarta.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "payment_method")
 public class PaymentMethod {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

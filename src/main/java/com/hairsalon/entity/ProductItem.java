@@ -13,7 +13,6 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity
-@Table(name = "product_item")
 public class ProductItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -15,7 +15,6 @@ import jakarta.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "role_details")
 
 public class RoleDetail extends BaseEntity{
     private static final long serialVersionUID = 1L;

@@ -12,7 +12,6 @@ import jakarta.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "customer_address")
 public class CustomerAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
