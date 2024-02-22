@@ -21,5 +21,5 @@ public class PromotionDetail {
     @ManyToOne
     @JoinColumn(name = "productItemId")
     private ProductItem productItem;
-    private Double discountPercent;
+    private Integer discountPercent;
 }
