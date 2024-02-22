@@ -35,5 +35,5 @@ public class ServiceHair {
     @JsonIgnore
     @OneToMany(mappedBy = "serviceHair", fetch = FetchType.LAZY, orphanRemoval = true,
             cascade = CascadeType.ALL)
-    private Collection<Review> reviews;
+    private Collection<ReviewServiceHair> reviews;
 }

@@ -12,7 +12,7 @@ import jakarta.persistence.*;
 @Getter
 @Setter
 @Entity
-public class Review {
+public class ReviewServiceHair {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -27,5 +27,5 @@ public class Review {
     private ServiceHair serviceHair;
     @ManyToOne()
     @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private User customer;
 }

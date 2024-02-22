@@ -36,7 +36,7 @@ public class OrderService {
     PaymentMethodRepository paymentMethodRepository;
 
     @Autowired
-    CustomerRepository customerRepository;
+    UserRepository userRepository;
 
 
     public ResponseEntity<ResponseObject> findAll() {
@@ -99,11 +99,9 @@ public class OrderService {
             JsonNode orderItemList = jsonObjectAppointment.get("orderItemList");
 
 
-            Optional<Customer> customerModel = customerRepository.findById(customerId);
-            Customer customer = new Customer();
-            customer.setId(customerModel.get().getId());
-            customer.setCustomerName(customerModel.get().getCustomerName());
-            customer.setEmail(customerModel.get().getEmail());
+            Optional<User> user = userRepository.findById(customerId);
+            User newUser = new User();
+            newUser.setId(user.get().getId());
 
 
             Optional<OrderStatus> orderStatusModel = orderStatusRepository.findById(statusId);
@@ -119,7 +117,7 @@ public class OrderService {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate parsedDate = LocalDate.parse(orderDate, dateFormatter);
 
-            order.setCustomer(customer);
+            order.setCustomer(newUser);
             order.setPaymentMethod(paymentMethod);
             order.setTotalPrice(totalPrice);
             order.setOrderStatus(orderStatus);
@@ -133,7 +131,7 @@ public class OrderService {
                     int id = orderItemJson.get("productItemId").asInt();
                     Optional<ProductItem> productItemModel = productItemRepository.findById(orderItemJson.get("productItemId").asInt());
                     ProductItem productItem = new ProductItem();
-                    productItem.setProductName(productItemModel.get().getProductName());
+                    productItem.setProductItemName(productItemModel.get().getProductItemName());
                     productItem.setId(productItemModel.get().getId());
                     productItem.setPrice(productItemModel.get().getPrice());
                     productItem.setStatus(productItemModel.get().getStatus());

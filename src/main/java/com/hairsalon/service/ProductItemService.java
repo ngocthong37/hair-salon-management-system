@@ -45,7 +45,7 @@ public class ProductItemService {
             String status = jsonNode.get("status") != null ? jsonNode.get("status").asText() : "";
 
             ProductItem productItem = new ProductItem();
-            productItem.setProductName(productName);
+            productItem.setProductItemName(productName);
             Product product = new Product();
             product.setId(productId);
             productItem.setProduct(product);
@@ -82,7 +82,7 @@ public class ProductItemService {
 
             if (productItemOptional.isPresent()) {
                 ProductItem productItem = productItemOptional.get();
-                productItem.setProductName(productName);
+                productItem.setProductItemName(productName);
                 productItem.setPrice(price);
                 productItem.setWarrantyTime(warrantyTime);
                 productItem.setQuantityInStock(quantity);

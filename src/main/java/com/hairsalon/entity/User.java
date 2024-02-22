@@ -23,6 +23,9 @@ public class User implements UserDetails {
     private String email;
     private String password;
 
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Cart cart;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

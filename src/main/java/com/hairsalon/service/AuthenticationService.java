@@ -1,18 +1,16 @@
 package com.hairsalon.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hairsalon.entity.AuthenticationRequest;
-import com.hairsalon.entity.AuthenticationResponse;
-import com.hairsalon.entity.RegisterRequest;
-import com.hairsalon.entity.Token;
+import com.hairsalon.entity.*;
 import com.hairsalon.Enum.TokenType;
-import com.hairsalon.entity.User;
+import com.hairsalon.respository.CartRepository;
 import com.hairsalon.respository.TokenRepository;
 import com.hairsalon.respository.UserRepository;
 import com.hairsalon.security.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,6 +28,10 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
+  @Autowired
+  private CartRepository cartRepository;
+
+
   public AuthenticationResponse register(RegisterRequest request) {
     var user = User.builder()
         .userName(request.getUserName())
@@ -38,6 +40,9 @@ public class AuthenticationService {
         .role(request.getRole())
         .build();
     var savedUser = repository.save(user);
+    Cart cart = new Cart();
+    cart.setCustomer(savedUser);
+    cartRepository.save(cart);
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);

@@ -24,7 +24,7 @@ public class Order {
     @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private User customer;
     @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "pay_id")

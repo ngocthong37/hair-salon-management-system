@@ -16,7 +16,7 @@ public class ReviewService {
 
     public ResponseEntity<Object> add(String json) {
         ObjectMapper objectMapper = new ObjectMapper();
-        Review review = new Review();
+        ReviewServiceHair review = new ReviewServiceHair();
         try {
             if (json == null || json.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -31,11 +31,11 @@ public class ReviewService {
                     Integer.parseInt(jsonObjectAppointment.get("rating").asText()) : 1;
             String comment = jsonObjectAppointment.get("comment") != null ?
                     jsonObjectAppointment.get("comment").asText() : "";
-            Customer customer = new Customer();
-            customer.setId(customerId);
+//            Customer customer = new Customer();
+//            customer.setId(customerId);
             ServiceHair serviceHair = new ServiceHair();
             serviceHair.setId(serviceId);
-            review.setCustomer(customer);
+//            review.setCustomer(customer);
             review.setServiceHair(serviceHair);
             review.setRatingValue(rating);
             review.setComment(comment);

@@ -1,24 +1,27 @@
 package com.hairsalon.entity;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import jakarta.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
-public class PaymentMethod {
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @ManyToOne()
-    @JoinColumn(name = "customer_id")
-    private User customer;
-    @Column(name = "payment_method_name")
-    private String paymentMethodName;
+    @ManyToOne
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
+    @ManyToOne
+    @JoinColumn(name = "product_item_id")
+    private ProductItem productItem;
+
+    private Integer quantity;
+
 }

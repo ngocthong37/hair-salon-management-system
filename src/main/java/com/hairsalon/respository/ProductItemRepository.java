@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public interface ProductItemRepository extends JpaRepository<ProductItem, Integer> {
-    @Query(value = "SELECT S FROM ProductItem S WHERE S.productName LIKE CONCAT('%', :productName, '%')")
+    @Query(value = "SELECT S FROM ProductItem S WHERE S.productItemName LIKE CONCAT('%', :productName, '%')")
     List<ProductItem> findByProductName(@Param("productName") String productName);
 
 }

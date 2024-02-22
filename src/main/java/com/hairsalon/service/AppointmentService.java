@@ -28,8 +28,8 @@ public class AppointmentService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    @Autowired
-    private CustomerRepository customerRepository;
+//    @Autowired
+//    private CustomerRepository customerRepository;
 
     @Autowired
     private SalonRepository salonRepository;
@@ -56,11 +56,11 @@ public class AppointmentService {
                         .map(appointment -> {
                             AppointmentModel appointmentModel = new AppointmentModel();
                             appointmentModel.setId(appointment.getId());
-                            appointmentModel.setCustomerName(appointment.getCustomer().getCustomerName());
+                            appointmentModel.setCustomerName(appointment.getUser().getUsername());
                             appointmentModel.setAppointmentTime(appointment.getAppointmentTime());
                             appointmentModel.setAppointmentDate(appointment.getAppointmentDate());
                             appointmentModel.setSalonName(appointment.getSalon().getSalonName());
-                            appointmentModel.setUserName(appointment.getCustomer().getCustomerName());
+                            appointmentModel.setUserName(appointment.getUser().getUsername());
                             appointmentModel.setServiceName(appointment.getServiceHair().getServiceName());
                             appointmentModel.setStatus(appointment.getAppointmentStatus().getStatus());
                             return appointmentModel;
@@ -101,12 +101,6 @@ public class AppointmentService {
 
             Appointment appointment = new Appointment();
 
-            Optional<Customer> customerModel = customerRepository.findById(customerId);
-            Customer customer = new Customer();
-            customer.setId(customerModel.get().getId());
-            customer.setCustomerName(customerModel.get().getCustomerName());
-            customer.setEmail(customerModel.get().getEmail());
-
             Optional<Salon> salonModel = salonRepository.findById(salonId);
             Salon salon = new Salon();
             salon.setId(salonModel.get().getId());
@@ -128,6 +122,12 @@ public class AppointmentService {
             newUser.setUserName(user.get().getUsername());
             newUser.setRole(user.get().getRole());
 
+            Optional<User> customer = userRepository.findById(customerId);
+            User newCustomer = new User();
+            newCustomer.setId(customer.get().getId());
+            newCustomer.setUserName(customer.get().getUsername());
+            newCustomer.setRole(customer.get().getRole());
+
 
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -136,7 +136,7 @@ public class AppointmentService {
             appointment.setSalon(salon);
             appointment.setAppointmentDate(parsedDate);
             appointment.setAppointmentTime(parsedTime);
-            appointment.setCustomer(customer);
+            appointment.setCustomer(newCustomer);
             appointment.setServiceHair(serviceHair);
             appointment.setAppointmentStatus(appointmentStatus);
 

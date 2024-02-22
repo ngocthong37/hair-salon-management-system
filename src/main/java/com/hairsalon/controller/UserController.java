@@ -1,7 +1,7 @@
 package com.hairsalon.controller;
 
 import com.hairsalon.entity.ResponseObject;
-import com.hairsalon.service.CustomerService;
+//import com.hairsalon.service.CustomerService;
 import com.hairsalon.service.OrderService;
 import com.hairsalon.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

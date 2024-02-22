@@ -14,8 +14,7 @@ import static com.hairsalon.Enum.Permission.*;
 
 @RequiredArgsConstructor
 public enum Role {
-
-    USER(Collections.emptySet()),
+    CUSTOMER(Collections.emptySet()),
     ADMIN(
             Set.of(
                     ADMIN_READ,
