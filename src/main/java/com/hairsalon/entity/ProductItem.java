@@ -30,10 +30,15 @@ public class ProductItem {
             cascade = CascadeType.ALL)
     private Collection<OrderItem> orderItems;
 
+    @OneToMany(mappedBy = "productItem", fetch = FetchType.LAZY, orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private Collection<CartItem> cartItems;
+
     @Column(name = "quantity_in_stock")
     private Integer quantityInStock;
     @Column(name = "warranty_time")
     private Integer warrantyTime;
     private String status;
+    private String imageUrl;
 
 }

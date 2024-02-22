@@ -7,6 +7,8 @@ import lombok.*;
 @Setter
 public class CartItemModel {
     private Integer id;
-    private String productName;
+    private String productItemName;
     private Integer quantity;
+    private String imageUrl;
+    private Double price;
 }

@@ -67,15 +67,20 @@ public class CartItemService {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseObject("ERROR", "Can not add to cart", ""));
     }
-    public ResponseEntity<ResponseObject> findAll() {
+    public ResponseEntity<ResponseObject> findAllByCustomerId(Integer cartId) {
         List<CartItemModel> cartItemModelList = null;
-
-        List<CartItem> cartItemList = cartItemRepository.findAll();
-
-        cartItemModelList = cartItemList.stream().map(cartItem -> modelMapper.map(
-                cartItem,
-                CartItemModel.class
-        )).toList();
+        List<CartItem> cartItemList = cartItemRepository.findAllCartItemByCartId(cartId);
+        cartItemModelList = cartItemList.stream().map(cartItem -> {
+            CartItemModel cartItemModel = new CartItemModel();
+            cartItemModel.setId(cartItem.getId());
+            cartItemModel.setQuantity(cartItem.getQuantity());
+            if (cartItem.getProductItem() != null) {
+                cartItemModel.setProductItemName(cartItem.getProductItem().getProductItemName());
+                cartItemModel.setImageUrl(cartItem.getProductItem().getImageUrl());
+                cartItemModel.setPrice(cartItem.getProductItem().getPrice());
+            }
+            return cartItemModel;
+        }).toList();
 
         if (!cartItemModelList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", cartItemModelList));
@@ -116,6 +121,5 @@ public class CartItemService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseObject("ERROR", "An error occurred", e.getMessage()));
         }
-
     }
 }

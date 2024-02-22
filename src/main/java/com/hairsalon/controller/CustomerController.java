@@ -52,9 +52,9 @@ public class CustomerController {
         return cartItemService.addToCart(json);
     }
 
-    @GetMapping("customer/findAllCartItems")
-    public ResponseEntity<ResponseObject> findAll() {
-        return cartItemService.findAll();
+    @GetMapping("customer/findAllCartItems/{cartId}")
+    public ResponseEntity<ResponseObject> findAllCartItem(@PathVariable Integer cartId ) {
+        return cartItemService.findAllByCustomerId(cartId);
     }
 
     @DeleteMapping("customer/deleteCartItem/{id}")

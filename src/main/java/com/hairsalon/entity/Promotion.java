@@ -6,21 +6,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
-public class CartItem {
+public class Promotion extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String promotionName;
+    private LocalDate startDate;
+    private LocalDate endDate;
     @ManyToOne
-    @JoinColumn(name = "product_item_id")
-    private ProductItem productItem;
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
-    private Integer quantity;
-
+    @JoinColumn(name = "user_id")
+    private User user;
 }

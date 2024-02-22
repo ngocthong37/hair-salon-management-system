@@ -11,16 +11,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class CartItem {
+public class PromotionDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
-    @JoinColumn(name = "product_item_id")
-    private ProductItem productItem;
+    @JoinColumn(name = "promotionId")
+    private Promotion promotion;
     @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
-    private Integer quantity;
-
+    @JoinColumn(name = "productItemId")
+    private ProductItem productItem;
+    private Double discountPercent;
 }
