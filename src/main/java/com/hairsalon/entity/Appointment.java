@@ -16,7 +16,7 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @Entity
-public class Appointment {
+public class Appointment extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -46,12 +46,6 @@ public class Appointment {
 
     @Column(name = "appointment_time")
     private LocalTime appointmentTime;
-
-    @Column(name = "created_at")
-    private Timestamp createAt;
-
-    @Column(name = "updated_at")
-    private Timestamp updateAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

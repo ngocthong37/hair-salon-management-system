@@ -31,26 +31,21 @@ public class ReviewService {
                     Integer.parseInt(jsonObjectAppointment.get("rating").asText()) : 1;
             String comment = jsonObjectAppointment.get("comment") != null ?
                     jsonObjectAppointment.get("comment").asText() : "";
-//            Customer customer = new Customer();
-//            customer.setId(customerId);
+
+            User customer = new User();
+            customer.setId(customerId);
+
             ServiceHair serviceHair = new ServiceHair();
             serviceHair.setId(serviceId);
-//            review.setCustomer(customer);
+            review.setCustomer(customer);
             review.setServiceHair(serviceHair);
             review.setRatingValue(rating);
             review.setComment(comment);
 
             reviewRepository.save(review);
-//            if (messageId != 0) {
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("OK", "Successfully", ""));
-//            } else {
-//                return ResponseEntity.status(HttpStatus.OK)
-//                        .body(new ResponseObject("ERROR", "Can not make an review", ""));
-//            }
-
-        }
-        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Successfully", ""));
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseObject("ERROR", "An error occurred", e.getMessage()));
         }

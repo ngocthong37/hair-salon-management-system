@@ -1,18 +1,17 @@
 package com.hairsalon.entity;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import jakarta.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
-public class ReviewServiceHair extends BaseEntity {
+public class ReviewProductItem extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -20,11 +19,9 @@ public class ReviewServiceHair extends BaseEntity {
     private Integer ratingValue;
     @Column(name = "comment")
     private String comment;
-
-
     @ManyToOne()
-    @JoinColumn(name = "service_id")
-    private ServiceHair serviceHair;
+    @JoinColumn(name = "product_item_id")
+    private ProductItem productItem;
     @ManyToOne()
     @JoinColumn(name = "customer_id")
     private User customer;

@@ -12,7 +12,7 @@ import jakarta.persistence.*;
 @Getter
 @Setter
 @Entity
-public class CustomerAddress {
+public class CustomerAddress extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

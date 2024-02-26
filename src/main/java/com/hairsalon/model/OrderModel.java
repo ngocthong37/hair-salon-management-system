@@ -17,9 +17,9 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class OrderModel {
     private Integer id;
-    private CustomerModel customerModel;
+    private CartItemModel cartItemModel;
     private Integer totalPrice;
-    private PaymentMethodModel paymentMethodModel;
-    private OrderStatusModel orderStatusModel;
+    private String paymentMethod;
+    private String orderStatus;
     private LocalDate orderDate;
 }

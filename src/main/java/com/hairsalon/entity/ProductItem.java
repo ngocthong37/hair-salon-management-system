@@ -13,11 +13,11 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity
-public class ProductItem {
+public class ProductItem extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "product_name")
+    @Column(name = "product_item_name")
     private String productItemName;
     @Column(name = "price")
     private Double price;

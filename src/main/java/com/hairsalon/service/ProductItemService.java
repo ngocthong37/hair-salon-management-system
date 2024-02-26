@@ -31,21 +31,21 @@ public class ProductItemService {
         }
     }
 
-
     public ResponseEntity<Object> add(String json) {
         JsonNode jsonNode;
         JsonMapper jsonMapper = new JsonMapper();
         try {
             jsonNode = jsonMapper.readTree(json);
-            String productName = jsonNode.get("productName") != null ? jsonNode.get("productName").asText() : "";
             Double price = jsonNode.get("price") != null ? jsonNode.get("price").asDouble() : null;
+            String productItemName = jsonNode.get("productItemName") != null ? jsonNode.get("productItemName").asText() : "";
+            String imageUrl = jsonNode.get("imageUrl") != null ? jsonNode.get("imageUrl").asText() : "";
             Integer quantity = jsonNode.get("quantity") != null ? jsonNode.get("quantity").asInt() : -1;
             Integer productId = jsonNode.get("productId") != null ? jsonNode.get("productId").asInt() : -1;
             Integer warrantyTime = jsonNode.get("warrantyTime") != null ? jsonNode.get("warrantyTime").asInt() : -1;
             String status = jsonNode.get("status") != null ? jsonNode.get("status").asText() : "";
 
             ProductItem productItem = new ProductItem();
-            productItem.setProductItemName(productName);
+            productItem.setProductItemName(productItemName);
             Product product = new Product();
             product.setId(productId);
             productItem.setProduct(product);
@@ -54,14 +54,12 @@ public class ProductItemService {
             productItem.setQuantityInStock(quantity);
             productItem.setStatus(status);
             productItem.setWarrantyTime(warrantyTime);
-
+            productItem.setImageUrl(imageUrl);
             ProductItem saveProduct = productItemRepository.save(productItem);
             if (saveProduct.getId() == null)
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("ERROR", "Have error when add product item", ""));
-
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
         }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", ""));
@@ -72,24 +70,24 @@ public class ProductItemService {
         JsonMapper jsonMapper = new JsonMapper();
         try {
             jsonNode = jsonMapper.readTree(json);
-            String productName = jsonNode.get("productName") != null ? jsonNode.get("productName").asText() : "";
+            String productItemName = jsonNode.get("productItemName") != null ? jsonNode.get("productItemName").asText() : "";
+            String imageUrl = jsonNode.get("imageUrl") != null ? jsonNode.get("imageUrl").asText() : "";
             Double price = jsonNode.get("price") != null ? jsonNode.get("price").asDouble() : null;
             Integer quantity = jsonNode.get("quantity") != null ? jsonNode.get("quantity").asInt() : -1;
             Integer productItemId = jsonNode.get("productItemId") != null ? jsonNode.get("productItemId").asInt() : -1;
             Integer warrantyTime = jsonNode.get("warrantyTime") != null ? jsonNode.get("warrantyTime").asInt() : -1;
             String status = jsonNode.get("status") != null ? jsonNode.get("status").asText() : "";
             Optional<ProductItem> productItemOptional = productItemRepository.findById(productItemId);
-
             if (productItemOptional.isPresent()) {
                 ProductItem productItem = productItemOptional.get();
-                productItem.setProductItemName(productName);
+                productItem.setProductItemName(productItemName);
                 productItem.setPrice(price);
                 productItem.setWarrantyTime(warrantyTime);
                 productItem.setQuantityInStock(quantity);
                 productItem.setStatus(status);
+                productItem.setImageUrl(imageUrl);
                 productItemRepository.save(productItem);
-            }
-            else {
+            } else {
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("ERROR", "Have error when update product item", ""));
             }
@@ -106,16 +104,13 @@ public class ProductItemService {
             results.put("productItemList", productItemList);
             if (results.size() > 0) {
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
-            }
-            else {
+            } else {
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ERROR", "Have error", ""));
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseObject("ERROR", "Have error:", e.getMessage()));
         }
     }
-
 }

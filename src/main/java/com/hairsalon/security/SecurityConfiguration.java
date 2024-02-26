@@ -32,7 +32,7 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        "/api/v1/auth/**",
+                        "/api/v1/**",
                         "/api/v1/services/**",
                         "/api/v1/products/**",
                         "/v3/api-docs/**",

@@ -142,8 +142,6 @@ public class AppointmentService {
 
             LocalDateTime now = LocalDateTime.now();
             Timestamp timestamp = Timestamp.valueOf(now);
-            appointment.setCreateAt(timestamp);
-            appointment.setUpdateAt(timestamp);
             appointment.setUser(newUser);
 
 

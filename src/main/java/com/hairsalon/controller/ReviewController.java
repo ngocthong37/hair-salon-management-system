@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/api/v1/")
+@RequestMapping(path = "/api/v1/customer/")
 public class ReviewController {
 
     @Autowired
     ReviewService reviewService;
 
 
-    @PostMapping("comment")
+    @PostMapping("/addReviewService")
     public ResponseEntity<Object> addComment(@RequestBody String json) {
         return reviewService.add(json);
     }

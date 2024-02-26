@@ -16,23 +16,22 @@ import java.util.Collection;
 @Setter
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Order extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     @JsonIgnore
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "customer_id")
     private User customer;
     @JsonIgnore
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "pay_id")
     private PaymentMethod paymentMethod;
     @Column(name = "total_price")
     private Integer totalPrice;
     @JsonIgnore
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "order_status_id")
     private OrderStatus orderStatus;
     @Column(name = "order_date")

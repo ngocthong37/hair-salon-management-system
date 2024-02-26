@@ -66,10 +66,10 @@ public class OrderService {
     public ResponseEntity<ResponseObject> findAllByCustomerId(Integer id) {
         Map<String, Object> results = new TreeMap<String, Object>();
         List<Order> orderModelList = new ArrayList<>();
-        orderModelList = orderRepository.findAllById(Collections.singleton(id));
-        results.put("orderList", orderModelList);
+        orderModelList = orderRepository.findAll();
+        results.put("result", orderModelList);
         if (results.size() > 0) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", orderModelList));
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Not found", "Not found", ""));
         }
@@ -104,10 +104,8 @@ public class OrderService {
             newUser.setId(user.get().getId());
 
 
-            Optional<OrderStatus> orderStatusModel = orderStatusRepository.findById(statusId);
             OrderStatus orderStatus = new OrderStatus();
-            orderStatus.setId(orderStatusModel.get().getId());
-            orderStatus.setStatus(orderStatusModel.get().getStatus());
+            orderStatus.setId(statusId);
 
             Optional<PaymentMethod> paymentMethodModel = paymentMethodRepository.findById(payId);
             PaymentMethod paymentMethod = new PaymentMethod();
