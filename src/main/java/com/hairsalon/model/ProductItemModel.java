@@ -16,10 +16,11 @@ import jakarta.persistence.Entity;
 
 public class ProductItemModel {
     private Integer id;
-    private String productName;
+    private String productItemName;
     private Double price;
     private Integer quantityInStock;
     private Integer warrantyTime;
     private String status;
-    private ProductModel productModel;
+    private String imageUrl;
+    private String description;
 }

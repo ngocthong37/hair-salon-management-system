@@ -40,5 +40,5 @@ public class ProductItem extends BaseEntity {
     private Integer warrantyTime;
     private String status;
     private String imageUrl;
-
+    private String description;
 }

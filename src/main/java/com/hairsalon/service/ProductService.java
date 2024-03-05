@@ -21,7 +21,6 @@ public class ProductService {
     ProductRepository productRepository;
 
     public ResponseEntity<ResponseObject> findAll() {
-        Map<String, Object> results = new TreeMap<String, Object>();
         List<Product> productList = new ArrayList<>();
         productList = productRepository.findAll();
         List<ProductModel> productModelList = productList.stream()
@@ -34,9 +33,8 @@ public class ProductService {
                     return productModel;
                 })
                 .collect(Collectors.toList());
-        results.put("productModelList", productModelList);
-        if (results.size() > 0) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
+        if (!productModelList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", productModelList));
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Not found", "Not found", ""));
         }

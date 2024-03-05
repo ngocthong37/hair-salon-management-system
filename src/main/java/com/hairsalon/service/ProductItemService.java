@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductItemService {
@@ -20,12 +21,22 @@ public class ProductItemService {
     private ProductItemRepository productItemRepository;
 
     public ResponseEntity<ResponseObject> findAll() {
-        Map<String, Object> results = new TreeMap<String, Object>();
-        List<ProductItem> productItemModelList = new ArrayList<>();
-        productItemModelList = productItemRepository.findAll();
-        results.put("productItemList", productItemModelList);
-        if (results.size() > 0) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", results));
+        List<ProductItem> productItemList = productItemRepository.findAll();
+        List<ProductItemModel> productItemModelList = productItemList.stream().map(
+                productItem -> {
+                    ProductItemModel productItemModel = new ProductItemModel();
+                    productItemModel.setId(productItem.getId());
+                    productItemModel.setProductItemName(productItem.getProductItemName());
+                    productItemModel.setPrice(productItem.getPrice());
+                    productItemModel.setImageUrl(productItem.getImageUrl());
+                    productItemModel.setStatus(productItem.getStatus());
+                    productItemModel.setQuantityInStock(productItem.getQuantityInStock());
+                    productItemModel.setWarrantyTime(productItem.getWarrantyTime());
+                    productItemModel.setDescription(productItem.getDescription());
+                    return productItemModel;
+                }).collect(Collectors.toList());
+        if (!productItemModelList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", productItemModelList));
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Not found", "Not found", ""));
         }
@@ -43,6 +54,7 @@ public class ProductItemService {
             Integer productId = jsonNode.get("productId") != null ? jsonNode.get("productId").asInt() : -1;
             Integer warrantyTime = jsonNode.get("warrantyTime") != null ? jsonNode.get("warrantyTime").asInt() : -1;
             String status = jsonNode.get("status") != null ? jsonNode.get("status").asText() : "";
+            String description = jsonNode.get("description") != null ? jsonNode.get("description").asText() : "";
 
             ProductItem productItem = new ProductItem();
             productItem.setProductItemName(productItemName);
@@ -55,6 +67,7 @@ public class ProductItemService {
             productItem.setStatus(status);
             productItem.setWarrantyTime(warrantyTime);
             productItem.setImageUrl(imageUrl);
+            productItem.setDescription(description);
             ProductItem saveProduct = productItemRepository.save(productItem);
             if (saveProduct.getId() == null)
                 return ResponseEntity.status(HttpStatus.OK)
@@ -113,4 +126,6 @@ public class ProductItemService {
                     .body(new ResponseObject("ERROR", "Have error:", e.getMessage()));
         }
     }
+
+
 }
